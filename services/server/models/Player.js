@@ -1,8 +1,8 @@
 class Player {
-  constructor(username, room, socket) {
-    this.username = username
-    this.room = room
-    this.socket = socket
+  constructor({roomName, playerName, socketId}) {
+    this.username = playerName
+    this.room = roomName
+    this.socket = socketId
     this.blockListIndex = 10
     this.spectre = []
   }

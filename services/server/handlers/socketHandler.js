@@ -11,7 +11,7 @@ const verbose = true
 
 const socketHandler = (socket, io) => {
   socket.on('joinRoom', (data, callback) => {
-    callback(joinRoom(socket, data))
+    callback(joinRoom(socket, data, io))
   })
   socket.on('getRoom', (data, callback) => {
     callback(getRoom(data.room))

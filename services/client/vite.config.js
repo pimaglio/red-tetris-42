@@ -1,5 +1,6 @@
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react'
+import WindiCSS from 'vite-plugin-windicss'
 
 export default defineConfig(({ mode }) => {
   // Load env file based on `mode` in the current working directory.
@@ -9,7 +10,7 @@ export default defineConfig(({ mode }) => {
   console.log('ENV CLIENT VITE', env)
 
   return {
-    plugins: [react()],
+    plugins: [react(), WindiCSS()],
     server: {
       port: env.CLIENT_PORT,
       host: env.CLIENT_IP

@@ -3,10 +3,10 @@ const getRandomTetriminoList = require("../helpers/gameHelpers");
 const { BLOCK_LIST_LIMIT, BLOCK_LIST_LIMIT_THRESHOLD } = require("../constants");
 
 class Room {
-  constructor(room, username) {
+  constructor(room, gameLeader) {
     this.name = room
     this.players = []
-    this.gameLeader = username
+    this.gameLeader = gameLeader
     this.isStarted = false
     this.blockList = []
   }
@@ -31,12 +31,10 @@ class Room {
     return this.blockList
   }
 
-  addPlayer(player, socket) {
-    let newPlayer = new Player(player.username, player.room, socket)
+  addPlayer(data) {
+    let newPlayer = new Player(data)
     this.players.push(newPlayer)
-    console.log(
-      `(ROOM) - Success adding player '${player.username}' to room '${player.room}'`,
-    )
+    console.log(`(ROOM) - Success adding player '${data.playerName}' to room '${data.roomName}'`)
     return newPlayer
   }
 
