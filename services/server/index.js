@@ -5,8 +5,6 @@ const handler = require('./handlers/socketHandler');
 
 const PORT = process.env.SERVER_PORT;
 
-console.log('PROCESS ENV', process.env)
-
 const router = require('./router');
 
 const app = express();

@@ -1,24 +1,40 @@
 import { createSlice } from '@reduxjs/toolkit'
 
+// ----------------------------------------------------------------------
+
 const initialState = {
     isConnected: false,
-    gameStatus: 'pending'
+    error: null,
+    roomName: null,
+    playerName: null,
+    gameLeader: null,
+    playerList: null
 }
+
+// ----------------------------------------------------------------------
 
 const roomSlice = createSlice({
     name: 'room',
     initialState,
     reducers: {
-        setRoomConnexion: ( state, action ) => {
-            //const { roomName, playerName } = action.payload
-            console.log('setRoomConnexionPayload', action.payload)
-            state.isConnected = true
+        setError: (state,action) => {
+          state.error = action.payload
         },
-        setGameStarted: (state, action) => {
-            state.gameStatus = 'inProgress'
+        startGame: () => {
+
+        },
+        setConnexion: ( state, action ) => {
+            const { gameLeader, playerList, name } = action.payload.room
+            state.isConnected = true
+            state.playerList = playerList
+            state.roomName = name
+            state.playerName = action.payload.playerName
+            state.gameLeader = gameLeader
         }
     }
 })
+
+// ----------------------------------------------------------------------
 
 const { actions, reducer } = roomSlice
 export const roomActions = actions

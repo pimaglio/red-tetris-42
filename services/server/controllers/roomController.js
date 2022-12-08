@@ -1,9 +1,10 @@
 const Room = require('../models/Room')
-const verbose = true
+const { loggerAction } = require("../utils");
 const roomList = []
+const verbose = process.env.NODE_ENV === 'development'
 
-const createRoom = data => {
-    let room = new Room(data)
+const createRoom = ( roomName, gameLeader ) => {
+    let room = new Room(roomName, gameLeader)
     roomList.push(room)
     return room
 }
@@ -14,44 +15,29 @@ const getRoom = name => {
 
 const joinRoom = ( socket, data ) => {
     const { roomName, playerName } = data
+    loggerAction({ ...data, isGroup: true, type: 'joinRoom', message: 'try to connect' })
+    let room = getRoom(roomName) ? getRoom(roomName) : createRoom(roomName, playerName)
     try {
-        verbose && console.log(`(joinRoom) - '${playerName}' try to connect to room '${roomName}'`)
-        let room = getRoom(roomName) ? getRoom(roomName) : createRoom(data)
-
-
-        // TODO: fix check player exist
-
         if (room.getPlayer(playerName)) throw new Error('userExist')
-        let player = room.addPlayer({
-            roomName,
-            playerName,
-            socketId: socket.id
-        })
+        let player = room.addPlayer({ roomName, playerName, socketId: socket.id })
         socket.join(roomName)
-        verbose && console.log('(joinRoom) - ' + playerName + ' SUCCESS JOIN ' + data.roomName)
-
+        loggerAction({ isEnd: true, message: 'connected success' })
         return { player, room: room }
     } catch (e) {
-        verbose && console.log('(ROOM ERROR) - ' + playerName + ' already exist in ' + roomName)
-        return ({ error: e })
+        loggerAction({ isError: true, isEnd: true, message: 'playerName already exist' })
+        return ({ error: e.message })
     }
-
-
-}
-
-const initRoom = ( socket, data ) => {
-    let player = getRoom(data.room).getPlayer(data.username)
-    verbose &&
-    console.log(
-        '(ACTION) - ' + data.username + ' create a new room:  ' + data.room,
-    )
 }
 
 const startGame = ( socket, data, io ) => {
-    let room = getRoom(data.room)
-    const { blockList } = room.startGame(socket.id)
-    io.in(data.room).emit('gameStarted', blockList)
-    verbose && console.log('(SOCKET) - Broadcast to all players of ' + data.room + ' @gameStarted')
+    const { roomName } = data
+    console.log('DATAAAAAA START GAME', data)
+    let room = getRoom(roomName)
+    if (room && room.isGameLeader(socket.id)) {
+        const { blockList } = room.startGame()
+        io.in(roomName).emit('gameStarted', { blockList })
+        verbose && console.log('(SOCKET) - Broadcast to all players of ' + roomName + ' @gameStarted')
+    }
 }
 
 const updateSpectre = ( socket, data ) => {
@@ -79,7 +65,6 @@ const getNewBlocks = ( socket, data ) => {
 
 module.exports = {
     joinRoom,
-    initRoom,
     startGame,
     updateSpectre,
     getRoom,

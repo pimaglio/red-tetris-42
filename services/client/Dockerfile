@@ -2,7 +2,7 @@
 # ---------------------------------------
 # Development stage
 # ---------------------------------------
-FROM node:16 AS development
+FROM node:16-alpine AS development
 
 WORKDIR /node
 # Install Node without having the whole application files (cache)

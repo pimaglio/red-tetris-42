@@ -1,30 +1,32 @@
 let Player = require('./Player')
 const getRandomTetriminoList = require("../helpers/gameHelpers");
 const { BLOCK_LIST_LIMIT, BLOCK_LIST_LIMIT_THRESHOLD } = require("../constants");
+const { loggerAction } = require("../utils");
 
 class Room {
-  constructor(room, gameLeader) {
-    this.name = room
-    this.players = []
+  constructor(roomName, gameLeader) {
+    this.name = roomName
+    this.playerList = []
     this.gameLeader = gameLeader
-    this.isStarted = false
+    this.gameStatus = 'pending'
     this.blockList = []
   }
 
+  isGameLeader(socketPlayerId) {
+    return this.playerList.find(player => player.socket === socketPlayerId && player.username === this.gameLeader)
+  }
 
-  startGame(socketPlayerId) {
-    if (this.players.find(player => player.socket === socketPlayerId && player.username === this.gameLeader)) {
-      const tetriminoList = getRandomTetriminoList()
-      this.blockList = tetriminoList
-      this.isStarted = true
-      return ({
-        blockList: tetriminoList.slice(0, BLOCK_LIST_LIMIT)
-      })
-    }
+  startGame() {
+    const tetriminoList = getRandomTetriminoList()
+    this.blockList = tetriminoList
+    this.gameStatus = 'inProgress'
+    return ({
+      blockList: tetriminoList.slice(0, BLOCK_LIST_LIMIT)
+    })
   }
 
   getPlayer(name) {
-    return this.players.find(player => player.username === name)
+    return this.playerList.find(player => player.username === name)
   }
 
   getBlockList() {
@@ -33,8 +35,8 @@ class Room {
 
   addPlayer(data) {
     let newPlayer = new Player(data)
-    this.players.push(newPlayer)
-    console.log(`(ROOM) - Success adding player '${data.playerName}' to room '${data.roomName}'`)
+    this.playerList.push(newPlayer)
+    loggerAction({type: 'room', message: 'success adding player'})
     return newPlayer
   }
 
@@ -56,7 +58,7 @@ class Room {
   }
 
   updateSpectre(data) {
-    let player = this.players.find(player => player.username === data.username)
+    let player = this.playerList.find(player => player.username === data.username)
     player.setSpectre(data.spectre)
   }
 

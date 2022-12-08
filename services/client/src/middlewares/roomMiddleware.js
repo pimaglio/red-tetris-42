@@ -1,27 +1,29 @@
+// redux
 import { roomActions } from "../redux/slices/RoomSlice.js";
 
-const logger = action => {
-    console.group(action.type)
-    console.info('dispatching', action)
-    console.groupEnd()
-}
+// ----------------------------------------------------------------------
 
 const roomMiddleware = socket => {
     return ({dispatch, getState}) => {
         socket.onAny((eventName, payload) => {
             switch (eventName) {
                 case 'gameStarted': {
-                    dispatch(roomActions.setGameStarted())
                     break
                 }
             }
         });
         return next => action => {
-            logger(action)
+            const { room } = getState()
             switch (action.type) {
-                case 'room/setRoomConnexion': {
+                case 'room/startGame': {
+                    socket.emit('startGame', {roomName: room.roomName})
+                    break
+                }
+                case 'room/setConnexion': {
                     const {roomName, playerName} = action.payload
+                    if (room.error) dispatch(roomActions.setError(null))
                     socket.emit('joinRoom', {roomName, playerName}, ( data ) => {
+                        if (data.error) return dispatch(roomActions.setError(data.error))
                         action.payload = {
                             ...action.payload,
                             ...data
