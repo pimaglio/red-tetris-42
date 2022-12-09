@@ -18,13 +18,14 @@ const joinRoom = ( socket, data ) => {
     loggerAction({ ...data, isGroup: true, type: 'joinRoom', message: 'try to connect' })
     let room = getRoom(roomName) ? getRoom(roomName) : createRoom(roomName, playerName)
     try {
+        if (room.gameStatus !== 'pending') throw new Error('roomUnavailable')
         if (room.getPlayer(playerName)) throw new Error('userExist')
         let player = room.addPlayer({ roomName, playerName, socketId: socket.id })
         socket.join(roomName)
         loggerAction({ isEnd: true, message: 'connected success' })
         return { player, room: room }
     } catch (e) {
-        loggerAction({ isError: true, isEnd: true, message: 'playerName already exist' })
+        loggerAction({ isError: true, isEnd: true, message: e })
         return ({ error: e.message })
     }
 }

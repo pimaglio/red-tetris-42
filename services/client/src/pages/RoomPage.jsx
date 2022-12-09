@@ -6,10 +6,11 @@ import toast from "react-hot-toast";
 // slices
 import { roomActions } from "../redux/slices/RoomSlice.js";
 // sections
-import { ModalUsernameExist } from "../sections/Room/Modals";
+import RoomModalError from "../sections/Room/ModalError.jsx";
 import GameBoard from "../sections/Room/GameBoard";
 // components
 import TetrisLoader from "../components/shared/Loading/TetrisLoading";
+
 
 // ----------------------------------------------------------------------
 
@@ -37,7 +38,7 @@ export default function RoomPage() {
     return (
         <div className="flex flex-col items-center max-w-lg mx-auto">
             <TetrisLoader message={'Connexion en cours...'}/>
-            <ModalUsernameExist state={state} playerName={playerName} roomName={roomName}/>
+            <RoomModalError error={error} state={state} playerName={playerName} roomName={roomName}/>
         </div>
     )
 }
