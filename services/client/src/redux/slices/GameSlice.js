@@ -47,6 +47,9 @@ const gameSlice = createSlice({
         },
         setBlockCollided: (state, action) => {
           state.currentBlock.collided = true
+        },
+        rotateBlock: (state, action) => {
+            state.currentBlock = action.payload.block
         }
     }
 })

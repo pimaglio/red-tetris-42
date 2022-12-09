@@ -1,7 +1,7 @@
 // slices
 import { gameActions } from "../redux/slices/GameSlice.js";
 // helpers
-import { buildBlock, buildNewGrid, checkCollision } from "../helpers/gameHelper.js";
+import { buildBlock, buildNewGrid, checkCollision, rotateBlock } from "../helpers/gameHelper.js";
 // constants
 import { BLOCK_LIST_ALERT_THRESHOLD } from "../constants/gameConstants.js";
 
@@ -33,20 +33,16 @@ const gameMiddleware = socket => {
                         const { x, y } = action.payload
                         const isCollided = checkCollision(game.currentBlock, game.grid, { x, y })
 
-                        console.group('MOVE BLOCK')
-                        console.log('POS: ', game.currentBlock.pos.x + x, game.currentBlock.pos.y + y)
-                        console.log('CHECK COLLISION: ', isCollided)
-                        console.groupEnd()
-
                         if (!(isCollided === 'out')) {
-                            action.payload.collided = isCollided
-                            if (y > 0 && action.payload.collided) action.payload.y = 0
+                            if (isCollided) {
+                                action.payload.collided = y > 0 && isCollided
+                                action.payload.y = 0
+                                action.payload.x = 0
+                            }
                             next(action)
-                            console.log('COUCOU')
                             dispatch(gameActions.updateGrid())
 
-
-                            if (isCollided) {
+                            if (isCollided && y > 0) {
                                 dispatch(gameActions.getNextBlock())
                             }
                         }
@@ -66,11 +62,19 @@ const gameMiddleware = socket => {
                     break
                 }
                 case 'game/updateGrid': {
-                    console.log('UPDATE GRID')
                     action.payload = {
                         grid: buildNewGrid(game.grid, [ game.currentBlock ])
                     }
                     return next(action)
+                }
+                case 'game/rotateBlock': {
+                    const block = rotateBlock(game.grid, game.currentBlock)
+                    if (block) {
+                        action.payload = {block}
+                        next(action)
+                        return dispatch(gameActions.updateGrid())
+                    }
+                    break
                 }
                 default:
                     return next(action)
