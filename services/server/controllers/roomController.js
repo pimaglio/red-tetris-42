@@ -58,8 +58,8 @@ const updateSpectre = ( socket, data ) => {
 }
 
 const getNewBlocks = ( socket, data ) => {
-    const { storeName, playerName } = data
-    let room = getRoom(storeName)
+    const { roomName, playerName } = data
+    let room = getRoom(roomName)
     return room.getMoreBlocks(playerName)
 }
 

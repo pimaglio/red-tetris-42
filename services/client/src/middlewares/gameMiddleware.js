@@ -1,6 +1,9 @@
+// slices
+import { gameActions } from "../redux/slices/GameSlice.js";
 // helpers
 import { buildBlock, buildNewGrid, checkCollision } from "../helpers/gameHelper.js";
-import { gameActions } from "../redux/slices/GameSlice.js";
+// constants
+import { BLOCK_LIST_ALERT_THRESHOLD } from "../constants/gameConstants.js";
 
 // ----------------------------------------------------------------------
 
@@ -16,7 +19,7 @@ const gameMiddleware = socket => {
             }
         });
         return next => action => {
-            const { game } = getState()
+            const { game, room } = getState()
             switch (action.type) {
                 case "game/start": {
                     let { blockList } = action.payload
@@ -38,8 +41,7 @@ const gameMiddleware = socket => {
                         if (!isCollided) {
                             next(action)
                             dispatch(gameActions.updateGrid())
-                        }
-                        else dispatch(gameActions.getNextBlock())
+                        } else dispatch(gameActions.getNextBlock())
                     }
                     break
                 }
@@ -48,11 +50,16 @@ const gameMiddleware = socket => {
                         nextBlock: buildBlock(game.blockList[0])
                     }
                     next(action)
-                    return dispatch(gameActions.updateBlockPosition({x: 0, y: 0}))
+                    dispatch(gameActions.updateBlockPosition({ x: 0, y: 0 }))
+                    if (game.blockList.length < BLOCK_LIST_ALERT_THRESHOLD) {
+                        socket.emit('getMoreBlocks', { roomName: room.roomName, playerName: room.playerName },
+                            ( nextBlockList ) => dispatch(gameActions.updateBlocklist(nextBlockList)))
+                    }
+                    break
                 }
                 case 'game/updateGrid': {
                     action.payload = {
-                        grid: buildNewGrid(game.grid, [game.currentBlock])
+                        grid: buildNewGrid(game.grid, [ game.currentBlock ])
                     }
                     return next(action)
                 }

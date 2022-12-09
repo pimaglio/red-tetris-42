@@ -22,8 +22,7 @@ const socketHandler = (socket, io) => {
     updateSpectre(socket, data.data)
   })
   socket.on('getMoreBlocks', (data, callback) => {
-    const nextBlockList = getNewBlocks(socket, data, io)
-    callback(nextBlockList)
+    callback(getNewBlocks(socket, data, io))
   })
 }
 

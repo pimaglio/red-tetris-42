@@ -30,6 +30,9 @@ const gameSlice = createSlice({
             state.gameStatus = 'inProgress'
             state.dropTime = DROP_TIME
         },
+        updateBlocklist: (state, action) => {
+          state.blockList = [...state.blockList, ...action.payload]
+        },
         updateBlockPosition: ( state, action ) => {
             const { x, y } = action.payload
             state.currentBlock.pos = { x: (state.currentBlock.pos.x += x), y: (state.currentBlock.pos.y += y) }
