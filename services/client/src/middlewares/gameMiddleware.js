@@ -41,7 +41,7 @@ const gameMiddleware = socket => {
                         if (!isCollided) {
                             next(action)
                             dispatch(gameActions.updateGrid())
-                        } else dispatch(gameActions.getNextBlock())
+                        } else if (isCollided !== 'out') dispatch(gameActions.getNextBlock())
                     }
                     break
                 }

@@ -5,6 +5,7 @@ import { gameActions } from "../redux/slices/GameSlice.js";
 // hooks
 import { useInterval } from "./useInterval.js";
 import { roomActions } from "../redux/slices/RoomSlice.js";
+import debounce from "../utils/debounce.js";
 
 
 // ----------------------------------------------------------------------
@@ -31,7 +32,9 @@ export default function useGame({dropTime}) {
         handleMoveBlock(0, 1)
     }, dropTime)*/
 
-    const handleKeyActions = ( { key } ) => {
+
+
+    const handleKeyActions = debounce(({key}) => {
         switch (key) {
             case 'ArrowLeft':
                 handleMoveBlock(-1, 0)
@@ -44,13 +47,13 @@ export default function useGame({dropTime}) {
                 break;
             case ' ':
                 break;
-/*            case 'ArrowUp':
-                handleRotateBlock()
-                break;*/
+            /*            case 'ArrowUp':
+                            handleRotateBlock()
+                            break;*/
             default:
                 break;
         }
-    }
+    }, 2git );
 
     return {
         handleStartGame
