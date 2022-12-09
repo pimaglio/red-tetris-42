@@ -32,7 +32,6 @@ const joinRoom = ( socket, data ) => {
 
 const startGame = ( socket, data, io ) => {
     const { roomName } = data
-    console.log('DATAAAAAA START GAME', data)
     let room = getRoom(roomName)
     if (room && room.isGameLeader(socket.id)) {
         const { blockList } = room.startGame()

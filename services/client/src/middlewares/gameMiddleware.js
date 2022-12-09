@@ -29,13 +29,28 @@ const gameMiddleware = socket => {
                     if (game.gameStatus === 'inProgress') {
                         const { x, y } = action.payload
                         const isCollided = checkCollision(game.currentBlock, game.grid, { x, y })
-                        if (!isCollided) next(action)
-                        return dispatch(gameActions.updateGrid())
+
+                        console.group('MOVE BLOCK')
+                        console.log('POS: ', game.currentBlock.pos.x + x, game.currentBlock.pos.y + y)
+                        console.log('CHECK COLLISION: ', isCollided)
+                        console.groupEnd()
+
+                        if (!isCollided) {
+                            next(action)
+                            dispatch(gameActions.updateGrid())
+                        }
+                        else dispatch(gameActions.getNextBlock())
                     }
                     break
                 }
+                case 'game/getNextBlock': {
+                    action.payload = {
+                        nextBlock: buildBlock(game.blockList[0])
+                    }
+                    next(action)
+                    return dispatch(gameActions.updateBlockPosition({x: 0, y: 0}))
+                }
                 case 'game/updateGrid': {
-                    console.log('CURRENT BLOCK', game.currentBlock)
                     action.payload = {
                         grid: buildNewGrid(game.grid, [game.currentBlock])
                     }

@@ -36,6 +36,13 @@ const gameSlice = createSlice({
         },
         updateGrid: (state, action) => {
             state.grid = action.payload.grid
+        },
+        getNextBlock: (state, action) => {
+            state.currentBlock = action.payload.nextBlock
+            state.blockList.shift()
+        },
+        updateCurrentBlock: (state, action) => {
+            state.currentBlock = action.payload.currentBlock
         }
     }
 })

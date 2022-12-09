@@ -27,12 +27,11 @@ export default function useGame({dropTime}) {
         dispatch(gameActions.updateBlockPosition({x, y}))
     }
 
-    useInterval(() => {
+/*    useInterval(() => {
         handleMoveBlock(0, 1)
-    }, dropTime)
+    }, dropTime)*/
 
     const handleKeyActions = ( { key } ) => {
-        console.log('KEY PRESS', key)
         switch (key) {
             case 'ArrowLeft':
                 handleMoveBlock(-1, 0)
