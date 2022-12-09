@@ -53,7 +53,7 @@ export default function useGame({dropTime}) {
             default:
                 break;
         }
-    }, 2git );
+    }, 2 );
 
     return {
         handleStartGame
