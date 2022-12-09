@@ -12,7 +12,6 @@ export default function GameBoard() {
     const { grid, dropTime } = useSelector(state => state.game)
     const { handleStartGame } = useGame({ dropTime })
 
-
     return (
         <div className={'h-screen outline-0'} tabIndex={0}>
             <Grid grid={grid}/>

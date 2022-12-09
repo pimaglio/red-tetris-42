@@ -31,7 +31,7 @@ const gameSlice = createSlice({
             state.dropTime = DROP_TIME
         },
         updateBlockPosition: ( state, action ) => {
-            const { x, y, grid } = action.payload
+            const { x, y } = action.payload
             state.currentBlock.pos = { x: (state.currentBlock.pos.x += x), y: (state.currentBlock.pos.y += y) }
         },
         updateGrid: (state, action) => {

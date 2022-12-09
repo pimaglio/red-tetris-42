@@ -27,7 +27,7 @@ export default function RoomPage() {
     useEffect(() => {
         if (!isConnected) dispatch(roomActions.setConnexion({roomName, playerName}))
         else if (isConnected) toast.success(`You join the ${roomName} room`)
-    }, [ isConnected, playerName ])
+    }, [ isConnected, playerName, roomName ])
 
     if (isConnected) return (
         <div className="flex flex-col items-center max-w-lg mx-auto">
