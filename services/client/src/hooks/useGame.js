@@ -25,7 +25,7 @@ export default function useGame({dropTime}) {
     }
 
     const handleMoveBlock = (x, y) => {
-        dispatch(gameActions.updateBlockPosition({x, y}))
+        dispatch(gameActions.updateCurrentBlock({x, y}))
     }
 
 /*    useInterval(() => {

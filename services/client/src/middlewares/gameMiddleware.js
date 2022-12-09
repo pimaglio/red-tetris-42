@@ -28,7 +28,7 @@ const gameMiddleware = socket => {
                     blockList.shift()
                     return next(action)
                 }
-                case 'game/updateBlockPosition': {
+                case 'game/updateCurrentBlock': {
                     if (game.gameStatus === 'inProgress') {
                         const { x, y } = action.payload
                         const isCollided = checkCollision(game.currentBlock, game.grid, { x, y })
@@ -38,10 +38,18 @@ const gameMiddleware = socket => {
                         console.log('CHECK COLLISION: ', isCollided)
                         console.groupEnd()
 
-                        if (!isCollided) {
+                        if (!(isCollided === 'out')) {
+                            action.payload.collided = isCollided
+                            if (y > 0 && action.payload.collided) action.payload.y = 0
                             next(action)
+                            console.log('COUCOU')
                             dispatch(gameActions.updateGrid())
-                        } else if (isCollided !== 'out') dispatch(gameActions.getNextBlock())
+
+
+                            if (isCollided) {
+                                dispatch(gameActions.getNextBlock())
+                            }
+                        }
                     }
                     break
                 }
@@ -50,14 +58,15 @@ const gameMiddleware = socket => {
                         nextBlock: buildBlock(game.blockList[0])
                     }
                     next(action)
-                    dispatch(gameActions.updateBlockPosition({ x: 0, y: 0 }))
+                    dispatch(gameActions.updateCurrentBlock({ x: 0, y: 0 }))
                     if (game.blockList.length < BLOCK_LIST_ALERT_THRESHOLD) {
                         socket.emit('getMoreBlocks', { roomName: room.roomName, playerName: room.playerName },
-                            ( nextBlockList ) => dispatch(gameActions.updateBlocklist(nextBlockList)))
+                            ( nextBlockList ) => dispatch(gameActions.updateBlockList(nextBlockList)))
                     }
                     break
                 }
                 case 'game/updateGrid': {
+                    console.log('UPDATE GRID')
                     action.payload = {
                         grid: buildNewGrid(game.grid, [ game.currentBlock ])
                     }

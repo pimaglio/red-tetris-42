@@ -30,12 +30,13 @@ const gameSlice = createSlice({
             state.gameStatus = 'inProgress'
             state.dropTime = DROP_TIME
         },
-        updateBlocklist: (state, action) => {
+        updateBlockList: (state, action) => {
           state.blockList = [...state.blockList, ...action.payload]
         },
-        updateBlockPosition: ( state, action ) => {
-            const { x, y } = action.payload
+        updateCurrentBlock: ( state, action ) => {
+            const { x, y, collided } = action.payload
             state.currentBlock.pos = { x: (state.currentBlock.pos.x += x), y: (state.currentBlock.pos.y += y) }
+            state.currentBlock.collided = collided
         },
         updateGrid: (state, action) => {
             state.grid = action.payload.grid
@@ -44,8 +45,8 @@ const gameSlice = createSlice({
             state.currentBlock = action.payload.nextBlock
             state.blockList.shift()
         },
-        updateCurrentBlock: (state, action) => {
-            state.currentBlock = action.payload.currentBlock
+        setBlockCollided: (state, action) => {
+          state.currentBlock.collided = true
         }
     }
 })
