@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 import { roomActions } from "../redux/slices/RoomSlice.js";
 // sections
 import RoomModalError from "../sections/Room/ModalError.jsx";
-import GameBoard from "../sections/Room/GameBoard";
+import Playground from "../sections/Room/Playground.jsx";
 // components
 import TetrisLoader from "../components/shared/Loading/TetrisLoading";
 
@@ -31,7 +31,7 @@ export default function RoomPage() {
 
     if (isConnected) return (
         <div className="flex flex-col items-center max-w-lg mx-auto">
-            <GameBoard/>
+            <Playground/>
         </div>
     )
 

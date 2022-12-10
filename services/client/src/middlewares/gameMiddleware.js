@@ -56,7 +56,7 @@ const gameMiddleware = socket => {
                     next(action)
                     dispatch(gameActions.updateCurrentBlock({ x: 0, y: 0 }))
                     if (game.blockList.length < BLOCK_LIST_ALERT_THRESHOLD) {
-                        socket.emit('getMoreBlocks', { roomName: room.roomName, playerName: room.playerName },
+                        socket.emit('getNextBlockList', room.roomName,
                             ( nextBlockList ) => dispatch(gameActions.updateBlockList(nextBlockList)))
                     }
                     break

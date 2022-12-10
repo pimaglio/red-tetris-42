@@ -1,14 +1,14 @@
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 // components
-import Grid from "../../components/gameBoard/Grid.jsx";
+import Grid from "../../components/playground/Grid.jsx";
 import { Button } from "../../components/shared/Button";
 // hooks
 import useGame from "../../hooks/useGame.js";
 
 // ----------------------------------------------------------------------
 
-export default function GameBoard() {
+export default function Playground() {
     const { grid, dropTime } = useSelector(state => state.game)
     const { handleStartGame } = useGame({ dropTime })
 

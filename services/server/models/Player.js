@@ -1,18 +1,22 @@
+const { BLOCK_LIST_LIMIT } = require("../constants");
+
+// ----------------------------------------------------------------------
+
 class Player {
   constructor({roomName, playerName, socketId}) {
-    this.username = playerName
+    this.name = playerName
     this.room = roomName
-    this.socket = socketId
+    this.socketId = socketId
     this.blockListIndex = 10
-    this.spectre = []
+    this.spectra = []
   }
 
-  setSpectre(spectre) {
-    this.spectre = spectre
+  setSpectra(spectra) {
+    this.spectra = spectra
   }
 
-  updateBlockListIndex(index) {
-    this.blockListIndex = index
+  updateBlockListIndex() {
+    this.blockListIndex += BLOCK_LIST_LIMIT
   }
 }
 

@@ -8,13 +8,13 @@ import Modal from "../../components/shared/Modal.jsx";
 // ----------------------------------------------------------------------
 
 const ROOM_ERROR_LIST = {
-    'userExist': {
+    'user_exist': {
         title: 'Username already exist',
         message: (props) => <><b>{props.playerName}</b> is already used by another player in this room.</>,
         inputLabel: 'Choose another username',
         inputName: 'playerName'
     },
-    'roomUnavailable': {
+    'room_unavailable': {
         title: 'Room unavailable',
         message: (props) => <>The room <b>{props.roomName}</b> is currently unavailable</>,
         inputLabel: 'Choose another room',
@@ -30,7 +30,7 @@ export default function RoomModalError(props) {
 
     const handleSubmit = (e) => {
         if (e.preventDefault) e.preventDefault()
-        if (props.error === 'userExist') navigate(`/${props.roomName}[${inputRef.current.value}]`)
+        if (props.error === 'user_exist') navigate(`/${props.roomName}[${inputRef.current.value}]`)
         else navigate(`/${inputRef.current.value}[${props.playerName}]`)
     }
 
@@ -39,7 +39,7 @@ export default function RoomModalError(props) {
         navigate('/')
     }
 
-    if (!props.error) return null
+    if (!props.error || !ROOM_ERROR_LIST[props.error]) return null
 
     return (
         <Modal state={props.state}>

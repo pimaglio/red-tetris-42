@@ -1,12 +1,8 @@
-const { TETRIMINO_LIMIT_CREATION_COUNT } = require("../constants");
+const { TETRIMINO_LIMIT_CREATION_COUNT, TETRIMINO_LIST_SHAPE } = require("../constants");
 
-function getRandomTetriminoList () {
-    const tetriminoShapeList = 'IJLOSTZ'
-    let listBlocks = []
-    for (let i = 0; i < TETRIMINO_LIMIT_CREATION_COUNT; i++) {
-        listBlocks.push(tetriminoShapeList.charAt(Math.floor(Math.random() * tetriminoShapeList.length)))
-    }
-    return listBlocks
+function generateRandomBlockList () {
+    return Array.from({length: TETRIMINO_LIMIT_CREATION_COUNT},
+        () => TETRIMINO_LIST_SHAPE.charAt(Math.floor(Math.random() * TETRIMINO_LIST_SHAPE.length)));
 }
 
-module.exports = getRandomTetriminoList
+module.exports = generateRandomBlockList
