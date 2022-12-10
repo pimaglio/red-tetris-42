@@ -33,9 +33,9 @@ export default function useGame( { dropTime } ) {
         dispatch(gameActions.rotateBlock())
     }
 
-    /*    useInterval(() => {
-            handleMoveBlock(0, 1)
-        }, dropTime)*/
+    useInterval(() => {
+        handleMoveBlock(0, 1)
+    }, dropTime)
 
 
     const handleKeyActions = debounce(( { key } ) => {
