@@ -2,7 +2,6 @@
 const Piece = require("./Piece");
 const Player = require("./Player");
 // constants
-const { BLOCK_LIST_LIMIT, BLOCK_LIST_LIMIT_THRESHOLD } = require("../constants");
 const { loggerAction } = require("../utils");
 
 // ----------------------------------------------------------------------
