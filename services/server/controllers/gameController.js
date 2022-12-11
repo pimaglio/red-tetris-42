@@ -8,7 +8,7 @@ const { verbose, BLOCK_LIST_LIMIT, BLOCK_LIST_LIMIT_THRESHOLD } = require("../co
 const startGame = ( socket, data, io ) => {
     const { roomName } = data
     const { game } = getRoom(roomName)
-    if (game && game.status === 'pending' && game.isGameLeader(socket.id)) {
+    if (game && game.status === 'pending' && game.isRoomLeader(socket.id)) {
         const { playerBlockList } = game.startGame()
         io.in(roomName).emit('gameStarted', { blockList: playerBlockList })
         verbose && console.log('(SOCKET) - Broadcast to all players of ' + roomName + ' @gameStarted')
@@ -41,8 +41,18 @@ const updateSpectra = ( socket, data ) => {
     return data
 }
 
+const gameOver = ( socket, roomName ) => {
+    const { game } = getRoom(roomName)
+    const player = game.getPlayer(socket.id)
+    const playerGameStatus = game.isGameWinner(socket.id) ? 'winner' : 'loser'
+    player.setGameStatus(playerGameStatus)
+    if (playerGameStatus === 'winner') game.stopGame()
+    return playerGameStatus
+}
+
 module.exports = {
     startGame,
     updateSpectra,
     getNextBlockList,
+    gameOver
 }

@@ -15,11 +15,12 @@ export default function useGame( { dropTime } ) {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        window.addEventListener("keydown", handleKeyActions);
+        if (dropTime) window.addEventListener("keydown", handleKeyActions);
+        else if (!dropTime) window.removeEventListener("keydown", handleKeyActions)
         return () => {
             window.removeEventListener("keydown", handleKeyActions);
         };
-    }, []);
+    }, [dropTime]);
 
     const handleStartGame = () => {
         dispatch(roomActions.startGame())
@@ -33,10 +34,10 @@ export default function useGame( { dropTime } ) {
         dispatch(gameActions.rotateBlock())
     }
 
-    useInterval(() => {
+    /*useInterval(() => {
         handleMoveBlock(0, 1)
     }, dropTime)
-
+*/
 
     const handleKeyActions = debounce(( { key } ) => {
         switch (key) {

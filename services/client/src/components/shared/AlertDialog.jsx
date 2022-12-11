@@ -6,7 +6,7 @@ import { Button } from "./Button.jsx";
 
 
 export default function AlertDialog(props) {
-    let { children, onClose, onConfirm, confirmLabel } = props;
+    let { children, onClose, onConfirm, confirmLabel, cancelLabel } = props;
 
     let ref = React.useRef(null);
     let { dialogProps, titleProps } = useDialog(
@@ -29,7 +29,7 @@ export default function AlertDialog(props) {
                 {children}
             </div>
             <div className="pt-8 flex space-x-3 justify-end">
-                <Button onPress={onClose}>Cancel</Button>
+                <Button onPress={onClose}>{cancelLabel || 'Cancel'}</Button>
                 <Button variant={props.variant || "cta"} onPress={onConfirm}>
                     {confirmLabel}
                 </Button>

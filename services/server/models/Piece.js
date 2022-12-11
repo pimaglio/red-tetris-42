@@ -1,5 +1,5 @@
 // helpers
-const generateRandomBlockList = require("../helpers/gameHelpers");
+const { generateRandomBlockListTest, generateRandomBlockList } = require("../helpers/gameHelpers");
 // constants
 const { BLOCK_LIST_LIMIT } = require("../constants");
 

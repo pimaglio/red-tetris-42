@@ -4,14 +4,15 @@ import { GRID_HEIGHT, GRID_WIDTH, TETRIMINO_COLLECTION } from "../constants/game
 // ----------------------------------------------------------------------
 
 
-export const buildBlock = ( blockShape) => (
-    {
-        pos: { x: 4, y: 0 },
-        tetrimino: TETRIMINO_COLLECTION[blockShape].shape,
+export const buildBlock = ( blockShape) => {
+    const block = TETRIMINO_COLLECTION[blockShape]
+    return ({
+        pos: { x: Math.round((GRID_WIDTH - block.shape[0].length) / 2), y: 0 },
+        tetrimino: block.shape,
+        shape: blockShape,
         collided: false,
-    }
-)
-
+    })
+}
 export const createGrid = () =>
     Array.from(Array(GRID_HEIGHT), () => Array(GRID_WIDTH).fill([0, 'clear']))
 

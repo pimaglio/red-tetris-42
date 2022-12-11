@@ -32,6 +32,7 @@ const gameMiddleware = socket => {
                     if (game.gameStatus === 'inProgress') {
                         const { x, y } = action.payload
                         const isCollided = checkCollision(game.currentBlock, game.grid, { x, y })
+                        if (isCollided && game.currentBlock.pos.y === 0) return dispatch(gameActions.stopGame())
 
                         if (!(isCollided === 'out')) {
                             if (isCollided) {
@@ -68,12 +69,21 @@ const gameMiddleware = socket => {
                     return next(action)
                 }
                 case 'game/rotateBlock': {
-                    const block = rotateBlock(game.grid, game.currentBlock)
-                    if (block) {
-                        action.payload = {block}
-                        next(action)
-                        return dispatch(gameActions.updateGrid())
+                    if (game.currentBlock.shape !== 'O') {
+                        const block = rotateBlock(game.grid, game.currentBlock)
+                        if (block) {
+                            action.payload = { block }
+                            next(action)
+                            return dispatch(gameActions.updateGrid())
+                        }
                     }
+                    break
+                }
+                case 'game/stopGame': {
+                    next(action)
+                    socket.emit('gameOver', room.roomName, ( playerGameStatus ) => {
+                        return dispatch(gameActions.setGameStatus(playerGameStatus))
+                    })
                     break
                 }
                 default:

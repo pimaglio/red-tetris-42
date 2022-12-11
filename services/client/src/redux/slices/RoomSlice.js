@@ -7,7 +7,7 @@ const initialState = {
     error: null,
     roomName: null,
     playerName: null,
-    gameLeader: null,
+    roomLeader: null,
     playerList: null
 }
 
@@ -20,16 +20,13 @@ const roomSlice = createSlice({
         setError: (state,action) => {
           state.error = action.payload
         },
-        startGame: () => {
-
-        },
         setConnexion: ( state, action ) => {
             const { gameLeader, playerList, name } = action.payload.room
             state.isConnected = true
             state.playerList = playerList
             state.roomName = name
             state.playerName = action.payload.playerName
-            state.gameLeader = gameLeader
+            state.roomLeader = gameLeader
         }
     }
 })

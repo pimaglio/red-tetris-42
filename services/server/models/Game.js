@@ -7,15 +7,14 @@ const { loggerAction } = require("../utils");
 // ----------------------------------------------------------------------
 
 class Game {
-    constructor( gameLeader ) {
-        this.leader = gameLeader
+    constructor() {
         this.status = 'pending'
         this.playerList = []
         this.blockList = []
     }
 
-    isGameLeader( socketId ) {
-        return this.playerList.find(player => player.socketId === socketId && player.name === this.leader)
+    isGameWinner() {
+        return this.playerList.filter(player => player.gameStatus === 'loser').length === this.playerList.length - 1
     }
 
     isAvailablePlayerName(playerName) {
@@ -38,6 +37,10 @@ class Game {
         this.blockList = gameBlockList
         this.status = 'inProgress'
         return ({ playerBlockList })
+    }
+
+    stopGame() {
+        this.status = 'done'
     }
 
     addMoreBlockList() {

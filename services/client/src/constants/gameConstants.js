@@ -19,15 +19,16 @@ export const TETRIMINO_COLLECTION = {
     },
     J: {
         shape: [
-            [0, 0, 'J'],
+            ['J', 0, 0],
             ['J', 'J', 'J'],
             [0, 0, 0],
         ],
         color: 'bg-blue-400',
+
     },
     L: {
         shape: [
-            ['L', 0, 0],
+            [0, 0, 'L'],
             ['L', 'L', 'L'],
             [0, 0, 0],
         ],
@@ -35,9 +36,9 @@ export const TETRIMINO_COLLECTION = {
     },
     O: {
         shape: [
-            ['O', 'O'],
-            ['O', 'O'],
-            [0, 0],
+            [0, 'O', 'O', 0],
+            [0, 'O', 'O', 0],
+            [0, 0, 0 , 0],
         ],
         color: 'bg-yellow-300',
     },
@@ -66,3 +67,5 @@ export const TETRIMINO_COLLECTION = {
         color: 'bg-red-400',
     },
 }
+
+export const TEST_GRID_FULL = [[[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],["S","clear"],["S","clear"],[0,"clear"],[0,"clear"],[0,"clear"]],[[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],["S","clear"],["S","clear"],["L","merged"],[0,"clear"],[0,"clear"],[0,"clear"]],[[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],["L","merged"],["L","merged"],["L","merged"],[0,"clear"],[0,"clear"],[0,"clear"]],[[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],["S","merged"],["S","merged"],[0,"clear"],[0,"clear"],[0,"clear"]],[[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],["S","merged"],["S","merged"],[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"]],[[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],["T","merged"],[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"]],[[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],["T","merged"],["T","merged"],["T","merged"],[0,"clear"],[0,"clear"],[0,"clear"]],[[0,"clear"],[0,"clear"],[0,"clear"],["I","merged"],["I","merged"],["I","merged"],["I","merged"],[0,"clear"],[0,"clear"],[0,"clear"]],[[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],["L","merged"],[0,"clear"],[0,"clear"],[0,"clear"]],[[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],["L","merged"],["L","merged"],["L","merged"],[0,"clear"],[0,"clear"],[0,"clear"]],[[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],["L","merged"],[0,"clear"],[0,"clear"],[0,"clear"]],[[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],["L","merged"],["L","merged"],["L","merged"],[0,"clear"],[0,"clear"],[0,"clear"]],[[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],["Z","merged"],["Z","merged"],[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"]],[[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],["Z","merged"],["Z","merged"],[0,"clear"],[0,"clear"],[0,"clear"]],[[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],["L","merged"],[0,"clear"],[0,"clear"],[0,"clear"]],[[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],["L","merged"],["L","merged"],["L","merged"],[0,"clear"],[0,"clear"],[0,"clear"]],[[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],["O","merged"],["O","merged"],[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"]],[[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],["O","merged"],["O","merged"],[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"]],[[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],["S","merged"],["S","merged"],[0,"clear"],[0,"clear"],[0,"clear"]],[[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],["S","merged"],["S","merged"],[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"]]]

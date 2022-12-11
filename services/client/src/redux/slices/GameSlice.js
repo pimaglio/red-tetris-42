@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 // helpers
 import { buildBlock, buildNewGrid, createGrid } from "../../helpers/gameHelper.js";
 // constants
-import { DROP_TIME } from "../../constants/gameConstants.js";
+import { DROP_TIME, TEST_GRID_FULL } from "../../constants/gameConstants.js";
 
 // ----------------------------------------------------------------------
 
@@ -11,6 +11,7 @@ const initialState = {
     currentBlock: null,
     blockList: [],
     grid: createGrid(),
+    //grid: TEST_GRID_FULL,
     dropTime: 0
 }
 
@@ -28,6 +29,7 @@ const gameSlice = createSlice({
             state.currentBlock = action.payload.initialBlock
             state.grid = action.payload.grid
             state.gameStatus = 'inProgress'
+            state.playerGameStatus = null
             state.dropTime = DROP_TIME
         },
         updateBlockList: (state, action) => {
@@ -45,11 +47,17 @@ const gameSlice = createSlice({
             state.currentBlock = action.payload.nextBlock
             state.blockList.shift()
         },
-        setBlockCollided: (state, action) => {
+        setBlockCollided: (state) => {
           state.currentBlock.collided = true
         },
         rotateBlock: (state, action) => {
             state.currentBlock = action.payload.block
+        },
+        stopGame: (state) => {
+            state.dropTime = 0
+        },
+        setGameStatus: (state, action) => {
+            state.playerGameStatus = action.payload
         }
     }
 })

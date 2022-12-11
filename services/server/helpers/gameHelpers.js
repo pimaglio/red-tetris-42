@@ -5,4 +5,12 @@ function generateRandomBlockList () {
         () => TETRIMINO_LIST_SHAPE.charAt(Math.floor(Math.random() * TETRIMINO_LIST_SHAPE.length)));
 }
 
-module.exports = generateRandomBlockList
+function generateRandomBlockListTest (shape) {
+    return Array.from({length: TETRIMINO_LIMIT_CREATION_COUNT},
+        () => shape);
+}
+
+module.exports = {
+    generateRandomBlockList,
+    generateRandomBlockListTest
+}
