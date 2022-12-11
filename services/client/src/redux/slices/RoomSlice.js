@@ -20,6 +20,12 @@ const roomSlice = createSlice({
         setError: (state,action) => {
           state.error = action.payload
         },
+        startGame: () => {
+
+        },
+        restartGame: () => {
+
+        },
         setConnexion: ( state, action ) => {
             const { gameLeader, playerList, name } = action.payload.room
             state.isConnected = true

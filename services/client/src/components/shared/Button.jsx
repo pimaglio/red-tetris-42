@@ -1,5 +1,6 @@
 import React from "react";
 import { useButton, useFocusRing, mergeProps } from "react-aria";
+import LoadingSpinner from "./Loading/Spinner";
 
 export function Button(props) {
     let ref = React.useRef(null);
@@ -16,15 +17,18 @@ export function Button(props) {
     }
 
     let focus = isFocusVisible ? "ring ring-offset-2 ring-blue-400" : "";
+    let disabled = props.isLoading ? "disabled:opacity-60" : ""
 
     return (
         <button
             {...mergeProps(buttonProps, focusProps)}
             ref={ref}
+            disabled={props.isLoading}
             type={props.type || 'button'}
-            className={`${focus} text-sm font-semibold py-2 px-4 rounded cursor-default focus:outline-none transition ${bg} cursor-pointer`}
+            className={`flex items-center ${focus} text-sm font-semibold py-2 px-4 rounded cursor-default focus:outline-none transition ${bg} cursor-pointer ${disabled}`}
         >
             {props.children}
+            {props.isLoading ? <LoadingSpinner color={props.loadingColor} size={props.loadingSize}/> : null}
         </button>
     );
 }

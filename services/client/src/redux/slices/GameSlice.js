@@ -32,6 +32,9 @@ const gameSlice = createSlice({
             state.playerGameStatus = null
             state.dropTime = DROP_TIME
         },
+        restart: (state,action) => {
+
+        },
         updateBlockList: (state, action) => {
           state.blockList = [...state.blockList, ...action.payload]
         },
@@ -58,6 +61,7 @@ const gameSlice = createSlice({
         },
         setGameStatus: (state, action) => {
             state.playerGameStatus = action.payload
+            if (action.payload === 'winner') state.gameStatus = 'done'
         }
     }
 })

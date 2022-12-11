@@ -7,9 +7,9 @@ const { verbose, BLOCK_LIST_LIMIT, BLOCK_LIST_LIMIT_THRESHOLD } = require("../co
 
 const startGame = ( socket, data, io ) => {
     const { roomName } = data
-    const { game } = getRoom(roomName)
-    if (game && game.status === 'pending' && game.isRoomLeader(socket.id)) {
-        const { playerBlockList } = game.startGame()
+    const room = getRoom(roomName)
+    if (room.game && room.game.status === 'pending' && room.isRoomLeader(socket.id)) {
+        const { playerBlockList } = room.game.startGame()
         io.in(roomName).emit('gameStarted', { blockList: playerBlockList })
         verbose && console.log('(SOCKET) - Broadcast to all players of ' + roomName + ' @gameStarted')
     }

@@ -15,7 +15,7 @@ export default function Playground() {
     let state = useOverlayTriggerState({});
     const { grid, dropTime, playerGameStatus } = useSelector(state => state.game)
     const { roomLeader, playerName } = useSelector(state => state.room)
-    const { handleStartGame } = useGame({ dropTime })
+    const { handleStartGame, handleRestartGame } = useGame({ dropTime })
 
     useEffect(() => {
         if (playerGameStatus) state.open()
@@ -24,7 +24,7 @@ export default function Playground() {
     return (
         <div className={'h-screen outline-0'} tabIndex={0}>
             <Grid grid={grid}/>
-            <ModalGameFinish state={state} playerGameStatus={playerGameStatus} isRoomLeader={roomLeader === playerName}/>
+            <ModalGameFinish onRestart={handleRestartGame} state={state} playerGameStatus={playerGameStatus} isRoomLeader={roomLeader === playerName}/>
             <Button variant='cta' onPress={handleStartGame}>Start game</Button>
         </div>
 

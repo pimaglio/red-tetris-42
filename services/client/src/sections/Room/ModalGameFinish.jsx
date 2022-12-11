@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 // components
 import AlertDialog from "../../components/shared/AlertDialog.jsx";
 import Modal from "../../components/shared/Modal.jsx";
+import { useEffect, useState } from "react";
 
 // ----------------------------------------------------------------------
 
@@ -27,9 +28,18 @@ const MODAL_GAME_FINISH_LIST = {
 
 export default function ModalGameFinish(props) {
     const navigate = useNavigate()
+    const [isLoading, setLoading] = useState(false)
+
+    useEffect(() => {
+        return () => {
+            if (isLoading) setLoading(false)
+        }
+    }, [])
 
     const handleSubmit = (e) => {
         if (e.preventDefault) e.preventDefault()
+        setLoading(true)
+        props.onRestart()
     }
 
     const handleClose = () => {
@@ -47,6 +57,7 @@ export default function ModalGameFinish(props) {
                 confirmLabel={MODAL_GAME_FINISH_LIST[props.playerGameStatus].confirmLabel}
                 cancelLabel={MODAL_GAME_FINISH_LIST[props.playerGameStatus].cancelLabel}
                 variant="cta"
+                isLoading={isLoading}
                 onClose={handleClose}
                 onConfirm={handleSubmit}
             >

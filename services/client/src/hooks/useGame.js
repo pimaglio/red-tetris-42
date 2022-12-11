@@ -26,6 +26,10 @@ export default function useGame( { dropTime } ) {
         dispatch(roomActions.startGame())
     }
 
+    const handleRestartGame = () => {
+        dispatch(roomActions.restartGame())
+    }
+
     const handleMoveBlock = ( x, y ) => {
         dispatch(gameActions.updateCurrentBlock({ x, y }))
     }
@@ -61,6 +65,7 @@ export default function useGame( { dropTime } ) {
     }, 2);
 
     return {
-        handleStartGame
+        handleStartGame,
+        handleRestartGame
     }
 }

@@ -47,7 +47,7 @@ export default function Modal(props) {
                         <div
                             {...modalProps}
                             ref={ref}
-                            className="p-8 min-w-500 max-w-sm bg-white/90 border border-gray-300 shadow-2xl rounded-lg z-1 top-[10%] h-fit max-h-[80vh] relative focus:outline-none"
+                            className="p-8 min-w-500 max-w-md bg-white/90 border border-gray-300 shadow-2xl rounded-lg z-1 top-[10%] h-fit max-h-[80vh] relative focus:outline-none"
                         >
                             {children}
                         </div>

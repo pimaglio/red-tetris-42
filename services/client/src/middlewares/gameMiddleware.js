@@ -28,6 +28,9 @@ const gameMiddleware = socket => {
                     blockList.shift()
                     return next(action)
                 }
+                case "game/restart": {
+                    break
+                }
                 case 'game/updateCurrentBlock': {
                     if (game.gameStatus === 'inProgress') {
                         const { x, y } = action.payload

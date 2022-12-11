@@ -19,6 +19,10 @@ const roomMiddleware = socket => {
                     socket.emit('startGame', {roomName: room.roomName})
                     break
                 }
+                case 'room/restartGame': {
+                    socket.emit('restartGame', {roomName: room.roomName})
+                    break
+                }
                 case 'room/setConnexion': {
                     const {roomName, playerName} = action.payload
                     if (room.error) dispatch(roomActions.setError(null))
