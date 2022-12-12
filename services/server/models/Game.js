@@ -11,13 +11,18 @@ class Game {
         this.status = 'pending'
         this.playerList = []
         this.blockList = []
+        this.restartGame = false
+    }
+
+    isGameWinnerBySocketId( socketId ) {
+        return this.playerList.find(player => player.socketId === socketId && player.gameResult === 'winner')
     }
 
     isGameWinner() {
-        return this.playerList.filter(player => player.gameStatus === 'loser').length === this.playerList.length - 1
+        return this.playerList.filter(player => player.gameResult === 'loser').length === this.playerList.length - 1
     }
 
-    isAvailablePlayerName(playerName) {
+    isAvailablePlayerName( playerName ) {
         return !this.playerList.find(player => player.name === playerName)
     }
 
@@ -32,11 +37,25 @@ class Game {
         return newPlayer
     }
 
+    disconnectPlayer( socketId ) {
+        const player = this.getPlayer(socketId)
+        player.disconnect()
+    }
+
     startGame() {
         const { gameBlockList, playerBlockList } = Piece.createBlockList()
         this.blockList = gameBlockList
         this.status = 'inProgress'
         return ({ playerBlockList })
+    }
+
+    setRestartGame() {
+        this.restartGame = true
+    }
+
+    resetGame() {
+        this.status = 'pending'
+        this.playerList.forEach(player => player.resetPlayer())
     }
 
     stopGame() {

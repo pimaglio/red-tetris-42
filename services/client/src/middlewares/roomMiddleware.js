@@ -1,5 +1,6 @@
 // redux
 import { roomActions } from "../redux/slices/RoomSlice.js";
+import { gameActions } from "../redux/slices/GameSlice.js";
 
 // ----------------------------------------------------------------------
 
@@ -10,17 +11,22 @@ const roomMiddleware = socket => {
                 case 'gameStarted': {
                     break
                 }
+                case 'playerDisconnection': {
+                    dispatch(roomActions.updatePlayerList(payload.playerList))
+                    if (payload.roomLeader) dispatch(roomActions.updateRoomLeader(payload.roomLeader))
+                    break
+                }
+                case 'replayGame': {
+                    dispatch(roomActions.setReplayGame())
+                    break
+                }
             }
         });
         return next => action => {
-            const { room } = getState()
+            const { room, game } = getState()
             switch (action.type) {
                 case 'room/startGame': {
-                    socket.emit('startGame', {roomName: room.roomName})
-                    break
-                }
-                case 'room/restartGame': {
-                    socket.emit('restartGame', {roomName: room.roomName})
+                    socket.emit('startGame')
                     break
                 }
                 case 'room/setConnexion': {
@@ -35,6 +41,10 @@ const roomMiddleware = socket => {
                         return next(action)
                     })
                     break
+                }
+                case 'room/setDisconnect': {
+                    socket.emit('playerLeave')
+                    return next(action)
                 }
                 default: return next(action)
             }

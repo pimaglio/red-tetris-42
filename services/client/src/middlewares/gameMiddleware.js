@@ -12,8 +12,12 @@ const gameMiddleware = socket => {
         socket.onAny(( eventName, payload ) => {
             switch (eventName) {
                 case 'gameStarted': {
-                    console.log('SOCKET EVENT GAME STARTED')
                     dispatch(gameActions.start(payload))
+                    break
+                }
+                case 'gameRestarted': {
+                    const { game } = getState()
+                    if (game.replay) dispatch(gameActions.resetGame(payload))
                     break
                 }
             }
@@ -27,9 +31,6 @@ const gameMiddleware = socket => {
                     action.payload.grid = buildNewGrid(game.grid, [ action.payload.initialBlock ])
                     blockList.shift()
                     return next(action)
-                }
-                case "game/restart": {
-                    break
                 }
                 case 'game/updateCurrentBlock': {
                     if (game.gameStatus === 'inProgress') {
@@ -86,9 +87,17 @@ const gameMiddleware = socket => {
                 case 'game/stopGame': {
                     next(action)
                     socket.emit('gameOver', ( playerGameStatus ) => {
-                        return dispatch(gameActions.setGameStatus(playerGameStatus))
+                        return dispatch(gameActions.setGameResult(playerGameStatus))
                     })
                     break
+                }
+                case 'room/setDisconnect': {
+                    dispatch(gameActions.resetGame())
+                    return next(action)
+                }
+                case 'game/restartGame': {
+                    socket.emit('restartGame')
+                    return next(action)
                 }
                 default:
                     return next(action)

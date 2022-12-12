@@ -3,7 +3,7 @@ const Room = require('../models/Room')
 // utils
 const { loggerAction } = require("../utils");
 // room database
-const roomList = []
+let roomList = []
 
 // ----------------------------------------------------------------------
 
@@ -13,7 +13,9 @@ const createRoom = ( roomName, gameLeader ) => {
     return room
 }
 
-const getRoom = name => {return roomList.find(room => room.name === name)}
+const getRoom = roomName => {return roomList.find(room => room.name === roomName)}
+
+const removeRoom = roomName => roomList = roomList.filter(room => room.name !== roomName)
 
 const joinRoom = ( socket, data ) => {
     const { roomName, playerName } = data
@@ -28,7 +30,26 @@ const joinRoom = ( socket, data ) => {
     return { player, room }
 }
 
+const userDisconnect = (socket, data, io) => {
+    console.log('PLAYER DISCONNECT', data)
+    const room = getRoom(socket.data.roomName)
+    if (room) {
+        room.game.disconnectPlayer(socket.id)
+        let newRoomLeader = null
+        if (room.isRoomLeader(socket.id)) {
+            newRoomLeader = room.game.playerList.find(player => player.socketId !== socket.id)
+            if (newRoomLeader) {
+                newRoomLeader = newRoomLeader.name
+                room.updateRoomLeader(newRoomLeader)
+            }
+            else removeRoom(socket.data.roomName)
+        }
+        io.in(socket.data.roomName).emit('playerDisconnection', {playerList: room.game.playerList, roomLeader: newRoomLeader})
+    }
+}
+
 module.exports = {
     joinRoom,
     getRoom,
+    userDisconnect
 }

@@ -14,6 +14,20 @@ const startGame = ( socket, io ) => {
     }
 }
 
+const restartGame = ( socket, io ) => {
+    const room = getRoom(socket.data.roomName)
+    const isRoomLeader = room.isRoomLeader(socket.id)
+    const isGameWinner = room.game.isGameWinnerBySocketId(socket.id)
+    if (isGameWinner && isRoomLeader) {
+        room.game.resetGame()
+        io.in(socket.data.roomName).emit('gameRestarted')
+    } else if (!isGameWinner && isRoomLeader) {
+        room.game.setRestartGame()
+        io.in(socket.data.roomName).emit('replayGame')
+    }
+    else socket.emit('gameRestarted')
+}
+
 const getNextBlockList = ( socket ) => {
     const { game } = getRoom(socket.data.roomName)
     const player = game.getPlayer(socket.id)
@@ -40,17 +54,25 @@ const updateSpectra = ( socket, data ) => {
     return data
 }
 
-const gameOver = ( socket ) => {
-    const { game } = getRoom(socket.data.roomName)
-    const player = game.getPlayer(socket.id)
-    const playerGameStatus = game.isGameWinner(socket.id) ? 'winner' : 'loser'
-    player.setGameStatus(playerGameStatus)
-    if (playerGameStatus === 'winner') game.stopGame()
-    return playerGameStatus
+const gameOver = ( socket, io ) => {
+    const room = getRoom(socket.data.roomName)
+    const player = room.game.getPlayer(socket.id)
+    const gameResult = room.game.isGameWinner() ? 'winner' : 'loser'
+    console.log('GAME RESULT', gameResult)
+    player.setGameResult(gameResult)
+    if (gameResult === 'winner') {
+        room.game.stopGame()
+        if (room.game.restartGame) {
+            room.game.resetGame()
+            io.in(socket.data.roomName).emit('gameRestarted')
+        }
+    }
+    return gameResult
 }
 
 module.exports = {
     startGame,
+    restartGame,
     updateSpectra,
     getNextBlockList,
     gameOver

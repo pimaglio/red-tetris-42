@@ -6,22 +6,34 @@ class Player {
   constructor({roomName, playerName, socketId}) {
     this.name = playerName
     this.room = roomName
-    this.gameStatus = ''
+    this.gameResult = ''
     this.socketId = socketId
     this.blockListIndex = 10
     this.spectra = []
+    this.isConnected = true
   }
 
   setSpectra(spectra) {
     this.spectra = spectra
   }
 
-  setGameStatus(gameStatus) {
-    this.gameStatus = gameStatus
+  setGameResult(gameResult) {
+    this.gameResult = gameResult
   }
 
   updateBlockListIndex() {
     this.blockListIndex += BLOCK_LIST_LIMIT
+  }
+
+  resetPlayer() {
+    this.gameResult = ''
+    this.blockListIndex = 10
+    this.spectra = []
+    this.isConnected = true
+  }
+
+  disconnect() {
+    this.isConnected = false
   }
 }
 

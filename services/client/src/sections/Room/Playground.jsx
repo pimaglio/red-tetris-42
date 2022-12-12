@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { useOverlayTriggerState } from "react-stately";
 // components
@@ -13,18 +13,21 @@ import useGame from "../../hooks/useGame.js";
 
 export default function Playground() {
     let state = useOverlayTriggerState({});
-    const { grid, dropTime, playerGameStatus } = useSelector(state => state.game)
-    const { roomLeader, playerName } = useSelector(state => state.room)
+    const { grid, dropTime, gameResult } = useSelector(state => state.game)
+    const { roomLeader, playerName, replayGame } = useSelector(state => state.room)
     const { handleStartGame, handleRestartGame } = useGame({ dropTime })
 
     useEffect(() => {
-        if (playerGameStatus) state.open()
-    }, [ playerGameStatus ])
+        if (!state.isOpen && gameResult) state.open()
+        else if(state.isOpen && !gameResult) state.close()
+    }, [ gameResult, state.isOpen ])
+
+    const renderGrid = useMemo(() => <Grid grid={grid}/>, [grid])
 
     return (
         <div className={'h-screen outline-0'} tabIndex={0}>
-            <Grid grid={grid}/>
-            <ModalGameFinish onRestart={handleRestartGame} state={state} playerGameStatus={playerGameStatus} isRoomLeader={roomLeader === playerName}/>
+            {renderGrid}
+            <ModalGameFinish onRestart={handleRestartGame} state={state} replayGame={replayGame} gameResult={gameResult} isRoomLeader={roomLeader === playerName}/>
             <Button variant='cta' onPress={handleStartGame}>Start game</Button>
         </div>
 

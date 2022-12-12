@@ -1,12 +1,12 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 // slices
 import { gameActions } from "../redux/slices/GameSlice.js";
+import { roomActions } from "../redux/slices/RoomSlice.js";
 // hooks
 import { useInterval } from "./useInterval.js";
-import { roomActions } from "../redux/slices/RoomSlice.js";
+// utils
 import debounce from "../utils/debounce.js";
-import { rotateBlock } from "../helpers/gameHelper.js";
 
 
 // ----------------------------------------------------------------------
@@ -27,7 +27,7 @@ export default function useGame( { dropTime } ) {
     }
 
     const handleRestartGame = () => {
-        dispatch(roomActions.restartGame())
+        dispatch(gameActions.restartGame())
     }
 
     const handleMoveBlock = ( x, y ) => {

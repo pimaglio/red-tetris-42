@@ -12,7 +12,8 @@ const initialState = {
     blockList: [],
     grid: createGrid(),
     //grid: TEST_GRID_FULL,
-    dropTime: 0
+    dropTime: 0,
+    gameResult: null
 }
 
 // ----------------------------------------------------------------------
@@ -29,38 +30,40 @@ const gameSlice = createSlice({
             state.currentBlock = action.payload.initialBlock
             state.grid = action.payload.grid
             state.gameStatus = 'inProgress'
-            state.playerGameStatus = null
+            state.gameResult = null
             state.dropTime = DROP_TIME
+            state.replay = false
         },
-        restart: (state,action) => {
-
+        restartGame: ( state, action ) => {
+            state.replay = true
         },
-        updateBlockList: (state, action) => {
-          state.blockList = [...state.blockList, ...action.payload]
+        resetGame: () => ({ ...initialState }),
+        updateBlockList: ( state, action ) => {
+            state.blockList = [ ...state.blockList, ...action.payload ]
         },
         updateCurrentBlock: ( state, action ) => {
             const { x, y, collided } = action.payload
             state.currentBlock.pos = { x: (state.currentBlock.pos.x += x), y: (state.currentBlock.pos.y += y) }
             state.currentBlock.collided = collided
         },
-        updateGrid: (state, action) => {
+        updateGrid: ( state, action ) => {
             state.grid = action.payload.grid
         },
-        getNextBlock: (state, action) => {
+        getNextBlock: ( state, action ) => {
             state.currentBlock = action.payload.nextBlock
             state.blockList.shift()
         },
-        setBlockCollided: (state) => {
-          state.currentBlock.collided = true
+        setBlockCollided: ( state ) => {
+            state.currentBlock.collided = true
         },
-        rotateBlock: (state, action) => {
+        rotateBlock: ( state, action ) => {
             state.currentBlock = action.payload.block
         },
-        stopGame: (state) => {
+        stopGame: ( state ) => {
             state.dropTime = 0
         },
-        setGameStatus: (state, action) => {
-            state.playerGameStatus = action.payload
+        setGameResult: ( state, action ) => {
+            state.gameResult = action.payload
             if (action.payload === 'winner') state.gameStatus = 'done'
         }
     }
