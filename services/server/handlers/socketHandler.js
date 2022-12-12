@@ -8,17 +8,17 @@ const socketHandler = ( socket, io ) => {
     socket.on('joinRoom', ( data, callback ) => {
         callback(joinRoom(socket, data, io))
     })
-    socket.on('startGame', ( data ) => {
-        startGame(socket, data, io)
+    socket.on('startGame', () => {
+        startGame(socket, io)
     })
-    socket.on('getNextBlockList', ( data, callback ) => {
-        callback(getNextBlockList(socket, data))
+    socket.on('getNextBlockList', ( callback ) => {
+        callback(getNextBlockList(socket))
     })
     socket.on('newSpectra', data => {
         updateSpectra(socket, data)
     })
-    socket.on('gameOver', (data, callback) => {
-        callback(gameOver(socket, data))
+    socket.on('gameOver', ( callback ) => {
+        callback(gameOver(socket))
     })
 }
 

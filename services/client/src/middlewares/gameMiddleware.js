@@ -60,8 +60,9 @@ const gameMiddleware = socket => {
                     next(action)
                     dispatch(gameActions.updateCurrentBlock({ x: 0, y: 0 }))
                     if (game.blockList.length < BLOCK_LIST_ALERT_THRESHOLD) {
-                        socket.emit('getNextBlockList', room.roomName,
-                            ( nextBlockList ) => dispatch(gameActions.updateBlockList(nextBlockList)))
+                        socket.emit('getNextBlockList', ( nextBlockList ) => {
+                            dispatch(gameActions.updateBlockList(nextBlockList))
+                        })
                     }
                     break
                 }
@@ -84,7 +85,7 @@ const gameMiddleware = socket => {
                 }
                 case 'game/stopGame': {
                     next(action)
-                    socket.emit('gameOver', room.roomName, ( playerGameStatus ) => {
+                    socket.emit('gameOver', ( playerGameStatus ) => {
                         return dispatch(gameActions.setGameStatus(playerGameStatus))
                     })
                     break

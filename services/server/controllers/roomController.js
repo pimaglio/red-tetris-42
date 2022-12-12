@@ -23,6 +23,7 @@ const joinRoom = ( socket, data ) => {
     if (!room.game.isAvailablePlayerName(playerName)) return ({error: 'user_exist'})
     let player = room.game.addPlayer({ roomName, playerName, socketId: socket.id })
     socket.join(roomName)
+    socket.data.roomName = roomName
     loggerAction({ isEnd: true, message: 'connected success' })
     return { player, room }
 }

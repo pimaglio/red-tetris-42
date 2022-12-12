@@ -5,18 +5,17 @@ const { verbose, BLOCK_LIST_LIMIT, BLOCK_LIST_LIMIT_THRESHOLD } = require("../co
 
 // ----------------------------------------------------------------------
 
-const startGame = ( socket, data, io ) => {
-    const { roomName } = data
-    const room = getRoom(roomName)
+const startGame = ( socket, io ) => {
+    const room = getRoom(socket.data.roomName)
     if (room.game && room.game.status === 'pending' && room.isRoomLeader(socket.id)) {
         const { playerBlockList } = room.game.startGame()
-        io.in(roomName).emit('gameStarted', { blockList: playerBlockList })
-        verbose && console.log('(SOCKET) - Broadcast to all players of ' + roomName + ' @gameStarted')
+        io.in(socket.data.roomName).emit('gameStarted', { blockList: playerBlockList })
+        verbose && console.log('(SOCKET) - Broadcast to all players of ' + socket.data.roomName + ' @gameStarted')
     }
 }
 
-const getNextBlockList = ( socket, roomName ) => {
-    const { game } = getRoom(roomName)
+const getNextBlockList = ( socket ) => {
+    const { game } = getRoom(socket.data.roomName)
     const player = game.getPlayer(socket.id)
     const blockList = Array.from({ length: BLOCK_LIST_LIMIT }, ( v, k ) => game.blockList[k + player.blockListIndex])
     player.updateBlockListIndex()
@@ -41,8 +40,8 @@ const updateSpectra = ( socket, data ) => {
     return data
 }
 
-const gameOver = ( socket, roomName ) => {
-    const { game } = getRoom(roomName)
+const gameOver = ( socket ) => {
+    const { game } = getRoom(socket.data.roomName)
     const player = game.getPlayer(socket.id)
     const playerGameStatus = game.isGameWinner(socket.id) ? 'winner' : 'loser'
     player.setGameStatus(playerGameStatus)
