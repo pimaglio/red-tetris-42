@@ -34,6 +34,7 @@ class Player {
 
   disconnect() {
     this.isConnected = false
+    this.gameResult = 'loser'
   }
 }
 

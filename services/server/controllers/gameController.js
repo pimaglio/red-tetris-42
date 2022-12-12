@@ -18,6 +18,7 @@ const restartGame = ( socket, io ) => {
     const room = getRoom(socket.data.roomName)
     const isRoomLeader = room.isRoomLeader(socket.id)
     const isGameWinner = room.game.isGameWinnerBySocketId(socket.id)
+    console.log('GAME RESULT', isGameWinner)
     if (isGameWinner && isRoomLeader) {
         room.game.resetGame()
         io.in(socket.data.roomName).emit('gameRestarted')
@@ -58,7 +59,7 @@ const gameOver = ( socket, io ) => {
     const room = getRoom(socket.data.roomName)
     const player = room.game.getPlayer(socket.id)
     const gameResult = room.game.isGameWinner() ? 'winner' : 'loser'
-    console.log('GAME RESULT', gameResult)
+
     player.setGameResult(gameResult)
     if (gameResult === 'winner') {
         room.game.stopGame()
