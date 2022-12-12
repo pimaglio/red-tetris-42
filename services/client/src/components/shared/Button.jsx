@@ -23,6 +23,10 @@ export function Button(props) {
         <button
             {...mergeProps(buttonProps, focusProps)}
             ref={ref}
+            onKeyDown={(e) => {
+                e.preventDefault()
+                ref.current.blur()
+            }}
             disabled={props.isLoading}
             type={props.type || 'button'}
             className={`flex items-center ${focus} text-sm font-semibold py-2 px-4 rounded cursor-default focus:outline-none transition ${bg} cursor-pointer ${disabled}`}

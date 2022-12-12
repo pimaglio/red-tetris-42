@@ -41,10 +41,14 @@ const gameSlice = createSlice({
         updateBlockList: ( state, action ) => {
             state.blockList = [ ...state.blockList, ...action.payload ]
         },
-        updateCurrentBlock: ( state, action ) => {
+        updateCurrentBlockPosition: ( state, action ) => {
             const { x, y, collided } = action.payload
             state.currentBlock.pos = { x: (state.currentBlock.pos.x += x), y: (state.currentBlock.pos.y += y) }
             state.currentBlock.collided = collided
+        },
+        hardDrop: (state,action) => {
+            state.currentBlock.pos = { x: state.currentBlock.pos.x, y: action.payload }
+            state.currentBlock.collided = true
         },
         updateGrid: ( state, action ) => {
             state.grid = action.payload.grid

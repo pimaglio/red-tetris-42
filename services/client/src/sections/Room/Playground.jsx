@@ -28,7 +28,7 @@ export default function Playground() {
         <div className={'h-screen outline-0'} tabIndex={0}>
             {renderGrid}
             <ModalGameFinish onRestart={handleRestartGame} state={state} replayGame={replayGame} gameResult={gameResult} isRoomLeader={roomLeader === playerName}/>
-            <Button variant='cta' onPress={handleStartGame}>Start game</Button>
+            <Button onKeyDown={(e) => e.preventDefault()} variant='cta' onPress={handleStartGame}>Start game</Button>
         </div>
 
     )

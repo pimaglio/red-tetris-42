@@ -32,11 +32,11 @@ const gameMiddleware = socket => {
                     blockList.shift()
                     return next(action)
                 }
-                case 'game/updateCurrentBlock': {
+                case 'game/updateCurrentBlockPosition': {
                     if (game.gameStatus === 'inProgress') {
                         const { x, y } = action.payload
                         const isCollided = checkCollision(game.currentBlock, game.grid, { x, y })
-                        if (isCollided && game.currentBlock.pos.y === 0) return dispatch(gameActions.stopGame())
+                        if (isCollided && isCollided !== 'out' && game.currentBlock.pos.y === 0) return dispatch(gameActions.stopGame())
 
                         if (!(isCollided === 'out')) {
                             if (isCollided) {
@@ -46,7 +46,6 @@ const gameMiddleware = socket => {
                             }
                             next(action)
                             dispatch(gameActions.updateGrid())
-
                             if (isCollided && y > 0) {
                                 dispatch(gameActions.getNextBlock())
                             }
@@ -54,12 +53,21 @@ const gameMiddleware = socket => {
                     }
                     break
                 }
+                case 'game/hardDrop': {
+                    let y = game.currentBlock.pos.y
+                    while (!checkCollision({...game.currentBlock, pos: {...game.currentBlock.pos, y}}, game.grid, { x: 0, y: 1 })) {
+                        y++
+                    }
+                    action.payload = y
+                    next(action)
+                    return dispatch(gameActions.updateGrid())
+                }
                 case 'game/getNextBlock': {
                     action.payload = {
                         nextBlock: buildBlock(game.blockList[0])
                     }
                     next(action)
-                    dispatch(gameActions.updateCurrentBlock({ x: 0, y: 0 }))
+                    dispatch(gameActions.updateCurrentBlockPosition({ x: 0, y: 0 }))
                     if (game.blockList.length < BLOCK_LIST_ALERT_THRESHOLD) {
                         socket.emit('getNextBlockList', ( nextBlockList ) => {
                             dispatch(gameActions.updateBlockList(nextBlockList))

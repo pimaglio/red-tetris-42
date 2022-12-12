@@ -31,7 +31,7 @@ export default function useGame( { dropTime } ) {
     }
 
     const handleMoveBlock = ( x, y ) => {
-        dispatch(gameActions.updateCurrentBlock({ x, y }))
+        dispatch(gameActions.updateCurrentBlockPosition({ x, y }))
     }
 
     const handleRotateBlock = () => {
@@ -44,6 +44,7 @@ export default function useGame( { dropTime } ) {
 */
 
     const handleKeyActions = debounce(( { key } ) => {
+
         switch (key) {
             case 'ArrowLeft':
                 handleMoveBlock(-1, 0)
@@ -55,6 +56,7 @@ export default function useGame( { dropTime } ) {
                 handleMoveBlock(0, 1)
                 break;
             case ' ':
+                dispatch(gameActions.hardDrop())
                 break;
             case 'ArrowUp':
                 handleRotateBlock()
