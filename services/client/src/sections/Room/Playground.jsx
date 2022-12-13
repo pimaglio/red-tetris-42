@@ -19,16 +19,26 @@ export default function Playground() {
 
     useEffect(() => {
         if (!state.isOpen && gameResult) state.open()
-        else if(state.isOpen && !gameResult) state.close()
+        else if (state.isOpen && !gameResult) state.close()
     }, [ gameResult, state.isOpen ])
 
-    const renderGrid = useMemo(() => <Grid grid={grid}/>, [grid])
+    const renderGrid = useMemo(() => <Grid grid={grid}/>, [ grid ])
 
     return (
         <div className={'h-screen outline-0'} tabIndex={0}>
             {renderGrid}
-            <ModalGameFinish onRestart={handleRestartGame} state={state} replayGame={replayGame} gameResult={gameResult} isRoomLeader={roomLeader === playerName}/>
-            <Button onKeyDown={(e) => e.preventDefault()} variant='cta' onPress={handleStartGame}>Start game</Button>
+            <ModalGameFinish
+                onRestart={handleRestartGame}
+                state={state}
+                replayGame={replayGame}
+                gameResult={gameResult}
+                isRoomLeader={roomLeader === playerName}
+            />
+            {roomLeader === playerName ? (
+                <Button onKeyDown={( e ) => e.preventDefault()} variant='cta' onPress={handleStartGame}>Start
+                    game</Button>
+            ) : null}
+
         </div>
 
     )
