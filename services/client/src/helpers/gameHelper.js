@@ -16,16 +16,23 @@ export const buildBlock = ( blockShape) => {
 export const createGrid = () =>
     Array.from(Array(GRID_HEIGHT), () => Array(GRID_WIDTH).fill([0, 'clear']))
 
-const sweepRows = (newRow) =>
+const checkAndCleanCompleteLine = (newRow, callback) =>
     newRow.reduce((ack, row) => {
         if (row.findIndex((cell) => cell[0] === 0) === -1) {
-            // TO DO ADD LINE DONE COUNTER
+            callback('CLEAN LINE')
             ack.unshift(new Array(newRow[0].length).fill([0, 'clear']));
             return ack;
         }
         ack.push(row);
         return ack;
     }, []);
+
+export const addGridPenaltyLine = (grid) => {
+    let newGrid = JSON.parse(JSON.stringify(grid))
+    newGrid.shift()
+    newGrid.push(Array.from({length: GRID_WIDTH}, () => [0, 'penalty']))
+    return newGrid
+}
 
 export const checkCollision = (block, grid, { x: moveX, y: moveY }) => {
     for (let y = 0; y < block.tetrimino.length; y += 1) {
@@ -40,7 +47,7 @@ export const checkCollision = (block, grid, { x: moveX, y: moveY }) => {
     return false
 }
 
-export const buildNewGrid = (grid, blockList) => {
+export const buildNewGrid = (grid, blockList, callback) => {
     // First flush the stage
     const newGrid = grid.map((row) => row.map((cell) => (cell[1] !== 'merged' ? [0, 'clear'] : cell)));
 
@@ -87,7 +94,7 @@ export const buildNewGrid = (grid, blockList) => {
 
     if (needCheckCompleteLine) {
         console.log('SWEEP ROW')
-        return sweepRows(newGrid)
+        return checkAndCleanCompleteLine(newGrid, callback)
     }
 
     return newGrid

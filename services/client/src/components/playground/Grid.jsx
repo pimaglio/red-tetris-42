@@ -10,7 +10,7 @@ export default function Grid( { grid, isSpectrum } ) {
                 row.map(
                     ( cell, x ) =>
                         <div className={'blockTint'}/> && (
-                            <Cell spectre={isSpectrum} key={x} type={cell[0]}/>
+                            <Cell spectre={isSpectrum} key={x} type={cell[0]} isPenalty={cell[1] === 'penalty'}/>
                         ),
                 ),
             )}

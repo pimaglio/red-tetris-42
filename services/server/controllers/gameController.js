@@ -71,10 +71,17 @@ const gameOver = ( socket, io ) => {
     return gameResult
 }
 
+const completeLine = (socket, io) => {
+    const room = getRoom(socket.data.roomName)
+    const player = room.game.getPlayer(socket.id)
+    io.in(socket.data.roomName).emit('setPenaltyLine', {playerName: player.name})
+}
+
 module.exports = {
     startGame,
     restartGame,
     updateSpectra,
     getNextBlockList,
-    gameOver
+    gameOver,
+    completeLine
 }

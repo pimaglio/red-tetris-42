@@ -28,6 +28,7 @@ class Player {
   resetPlayer() {
     this.gameResult = ''
     this.blockListIndex = 10
+    this.penaltyLineCount = 0
     this.spectra = []
     this.isConnected = true
   }

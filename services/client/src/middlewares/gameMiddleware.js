@@ -1,7 +1,7 @@
 // slices
 import { gameActions } from "../redux/slices/GameSlice.js";
 // helpers
-import { buildBlock, buildNewGrid, checkCollision, rotateBlock } from "../helpers/gameHelper.js";
+import { addGridPenaltyLine, buildBlock, buildNewGrid, checkCollision, rotateBlock } from "../helpers/gameHelper.js";
 // constants
 import { BLOCK_LIST_ALERT_THRESHOLD } from "../constants/gameConstants.js";
 
@@ -10,14 +10,21 @@ import { BLOCK_LIST_ALERT_THRESHOLD } from "../constants/gameConstants.js";
 const gameMiddleware = socket => {
     return ( { dispatch, getState } ) => {
         socket.onAny(( eventName, payload ) => {
+            const { game, room } = getState()
             switch (eventName) {
                 case 'gameStarted': {
                     dispatch(gameActions.start(payload))
                     break
                 }
                 case 'gameRestarted': {
-                    const { game } = getState()
                     if (game.replay) dispatch(gameActions.resetGame(payload))
+                    break
+                }
+                case 'setPenaltyLine': {
+                    if (room.playerName !== payload.playerName) {
+                        const newGrid = addGridPenaltyLine(game.grid)
+                        dispatch(gameActions.addPenaltyLine(newGrid))
+                    }
                     break
                 }
             }
@@ -76,9 +83,13 @@ const gameMiddleware = socket => {
                     break
                 }
                 case 'game/updateGrid': {
+                    let countLineComplete = 0
+                    const grid = buildNewGrid(game.grid, [ game.currentBlock ], () => countLineComplete++)
                     action.payload = {
-                        grid: buildNewGrid(game.grid, [ game.currentBlock ])
+                        grid
                     }
+                    if (countLineComplete) socket.emit('completeLine')
+                    console.log('countLineComplete', countLineComplete)
                     return next(action)
                 }
                 case 'game/rotateBlock': {
