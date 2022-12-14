@@ -11,7 +11,7 @@ import debounce from "../utils/debounce.js";
 
 // ----------------------------------------------------------------------
 
-export default function useGame( { dropTime } ) {
+export default function useGame( { dropTime, game, grid } ) {
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -32,6 +32,10 @@ export default function useGame( { dropTime } ) {
 
     const handleMoveBlock = ( x, y ) => {
         dispatch(gameActions.updateCurrentBlockPosition({ x, y }))
+    }
+
+    const handleHardDrop = () => {
+        dispatch(gameActions.updateCurrentBlockPosition({ x: 0, y: 0, isHardDrop: true}))
     }
 
     const handleRotateBlock = () => {
@@ -56,7 +60,7 @@ export default function useGame( { dropTime } ) {
                 handleMoveBlock(0, 1)
                 break;
             case ' ':
-                dispatch(gameActions.hardDrop())
+                handleHardDrop()
                 break;
             case 'ArrowUp':
                 handleRotateBlock()

@@ -1,7 +1,14 @@
 // slices
 import { gameActions } from "../redux/slices/GameSlice.js";
 // helpers
-import { addGridPenaltyLine, buildBlock, buildNewGrid, checkCollision, rotateBlock } from "../helpers/gameHelper.js";
+import {
+    addGridPenaltyLine,
+    buildBlock,
+    buildNewGrid,
+    checkCollision,
+    getHardDropPosition,
+    rotateBlock
+} from "../helpers/gameHelper.js";
 // constants
 import { BLOCK_LIST_ALERT_THRESHOLD } from "../constants/gameConstants.js";
 
@@ -22,8 +29,9 @@ const gameMiddleware = socket => {
                 }
                 case 'setPenaltyLine': {
                     if (room.playerName !== payload.playerName) {
-                        const newGrid = addGridPenaltyLine(game.grid)
-                        dispatch(gameActions.addPenaltyLine(newGrid))
+                        const newGrid = addGridPenaltyLine(game.grid, game.currentBlock)
+                        if (!newGrid) return dispatch(gameActions.stopGame())
+                        else return dispatch(gameActions.addPenaltyLine(newGrid))
                     }
                     break
                 }
@@ -41,33 +49,30 @@ const gameMiddleware = socket => {
                 }
                 case 'game/updateCurrentBlockPosition': {
                     if (game.gameStatus === 'inProgress') {
-                        const { x, y } = action.payload
+                        let { x, y, isHardDrop } = action.payload
+                        if (isHardDrop) {
+                            y = getHardDropPosition(game.currentBlock, game.grid) || 1
+                            console.log('Y', y)
+                            action.payload.y = y
+                            console.log('ACTION PAYLOAD Y', action.payload.y)
+                        }
                         const isCollided = checkCollision(game.currentBlock, game.grid, { x, y })
                         if (isCollided && isCollided !== 'out' && game.currentBlock.pos.y === 0) return dispatch(gameActions.stopGame())
-
                         if (!(isCollided === 'out')) {
                             if (isCollided) {
                                 action.payload.collided = y > 0 && isCollided
-                                action.payload.y = 0
+                                action.payload.y = isHardDrop && y > 1 ? y : 0
                                 action.payload.x = 0
                             }
                             next(action)
                             dispatch(gameActions.updateGrid())
+                            console.log('IS COLLIDED', isCollided, y)
                             if (isCollided && y > 0) {
                                 dispatch(gameActions.getNextBlock())
                             }
                         }
                     }
                     break
-                }
-                case 'game/hardDrop': {
-                    let y = game.currentBlock.pos.y
-                    while (!checkCollision({...game.currentBlock, pos: {...game.currentBlock.pos, y}}, game.grid, { x: 0, y: 1 })) {
-                        y++
-                    }
-                    action.payload = y
-                    next(action)
-                    return dispatch(gameActions.updateGrid())
                 }
                 case 'game/getNextBlock': {
                     action.payload = {

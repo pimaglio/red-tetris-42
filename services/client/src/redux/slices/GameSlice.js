@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 // helpers
-import { buildBlock, buildNewGrid, createGrid } from "../../helpers/gameHelper.js";
+import { buildBlock, buildNewGrid, createGrid, createGridTest } from "../../helpers/gameHelper.js";
 // constants
 import { DROP_TIME, TEST_GRID_FULL } from "../../constants/gameConstants.js";
 
@@ -10,8 +10,8 @@ const initialState = {
     gameStatus: 'pending',
     currentBlock: null,
     blockList: [],
-    grid: createGrid(),
-    //grid: TEST_GRID_FULL,
+    //grid: createGrid(),
+    grid: createGridTest('completeLine'),
     dropTime: 0,
     gameResult: null
 }
@@ -45,10 +45,6 @@ const gameSlice = createSlice({
             const { x, y, collided } = action.payload
             state.currentBlock.pos = { x: (state.currentBlock.pos.x += x), y: (state.currentBlock.pos.y += y) }
             state.currentBlock.collided = collided
-        },
-        hardDrop: (state,action) => {
-            state.currentBlock.pos = { x: state.currentBlock.pos.x, y: action.payload }
-            state.currentBlock.collided = true
         },
         updateGrid: ( state, action ) => {
             state.grid = action.payload.grid

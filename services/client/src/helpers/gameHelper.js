@@ -16,6 +16,17 @@ export const buildBlock = ( blockShape) => {
 export const createGrid = () =>
     Array.from(Array(GRID_HEIGHT), () => Array(GRID_WIDTH).fill([0, 'clear']))
 
+export const createGridTest = (gridType) => {
+    switch (gridType) {
+        case 'completeLine': {
+            let grid = Array.from(Array(GRID_HEIGHT - 1), () => Array(GRID_WIDTH).fill([0, 'clear']))
+            grid.push(new Array(GRID_WIDTH).fill(['O', 'merged']))
+            return grid
+        }
+        default: return Array.from(Array(GRID_HEIGHT), () => Array(GRID_WIDTH).fill([0, 'clear']))
+    }
+}
+
 const checkAndCleanCompleteLine = (newRow, callback) =>
     newRow.reduce((ack, row) => {
         if (row.findIndex((cell) => cell[0] === 0) === -1) {
@@ -27,11 +38,25 @@ const checkAndCleanCompleteLine = (newRow, callback) =>
         return ack;
     }, []);
 
-export const addGridPenaltyLine = (grid) => {
+export const addGridPenaltyLine = (grid, currentBlock) => {
     let newGrid = JSON.parse(JSON.stringify(grid))
-    newGrid.shift()
-    newGrid.push(Array.from({length: GRID_WIDTH}, () => [0, 'penalty']))
-    return newGrid
+    let columnIndex = newGrid.length - 1
+    if (currentBlock.collided) newGrid.shift()
+    else while (columnIndex > -1 && !newGrid[columnIndex].every(cell => cell[0] === 0 && cell[1] === 'clear')) columnIndex--
+    if (columnIndex > -1) {
+        newGrid.slice(columnIndex, 1)
+        newGrid.push(Array.from({length: GRID_WIDTH}, () => [0, 'penalty']))
+        return newGrid
+    }
+    else return false
+}
+
+export const getHardDropPosition = (currentBlock, grid) => {
+    let y = currentBlock.pos.y
+    while (!checkCollision({...currentBlock, pos: {...currentBlock.pos, y}}, grid, { x: 0, y: 1 })) {
+        y++
+    }
+    return y - currentBlock.pos.y
 }
 
 export const checkCollision = (block, grid, { x: moveX, y: moveY }) => {
@@ -49,7 +74,8 @@ export const checkCollision = (block, grid, { x: moveX, y: moveY }) => {
 
 export const buildNewGrid = (grid, blockList, callback) => {
     // First flush the stage
-    const newGrid = grid.map((row) => row.map((cell) => (cell[1] !== 'merged' ? [0, 'clear'] : cell)));
+    console.log('BIUILD NEW GRID',blockList)
+    const newGrid = grid.map((row) => row.map((cell) => (cell[1] === 'clear' ? [0, 'clear'] : cell)));
 
 
     // const getPrediction = () => {
