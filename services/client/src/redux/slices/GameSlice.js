@@ -10,8 +10,7 @@ const initialState = {
     gameStatus: 'pending',
     currentBlock: null,
     blockList: [],
-    //grid: createGrid(),
-    grid: createGridTest('completeLine'),
+    grid: createGrid(),
     dropTime: 0,
     gameResult: null
 }

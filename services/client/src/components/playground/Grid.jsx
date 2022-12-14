@@ -9,7 +9,7 @@ export default function Grid( { grid, spectra } ) {
     const renderCell = (cell, x, y) => useMemo(() => <Cell key={x} spectra={spectra && spectra[x] === y} type={cell[0]} isPenalty={cell[1] === 'penalty'}/>, [cell[0]])
 
     return (
-        <div className={'inline-grid grid-cols-10 gap-px'}>
+        <div className={'inline-grid grid-cols-10 gap-0.5'}>
             {grid.map(( row, y ) =>
                 row.map(
                     ( cell, x ) => renderCell(cell, x, y)

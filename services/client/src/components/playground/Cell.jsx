@@ -9,6 +9,6 @@ export default function Cell( { type, isPenalty, spectra } ) {
     console.log('CELL RENDER')
 
     return (
-        <div className={`p-4 ${isPenalty ? 'bg-gray-400' : cellColor} ${spectra ? 'bg-red-400' : ''}`}/>
+        <div className={`rounded-sm p-4 ${isPenalty ? 'bg-gray-400' : cellColor} ${spectra ? 'bg-red-400' : ''}`}/>
     )
 }

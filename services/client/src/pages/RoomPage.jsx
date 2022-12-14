@@ -31,9 +31,12 @@ export default function RoomPage() {
     }, [ isConnected, playerName, roomName ])
 
     return (
-        <div className="relative bg-[radial-gradient(145.05%_100%_at_50%_0%,#1D2B41_0%,#020509_57.38%,#0F1A29_88.16%)]">
+        <div className="h-screen relative p-5 bg-[radial-gradient(145.05%_100%_at_50%_0%,#1D2B41_0%,#020509_57.38%,#0F1A29_88.16%)]">
             {isConnected ? (
-                <Playground/>
+                <div className={'flex justify-between'}>
+                    <Playground/>
+                    <PlayerList playerList={playerList}/>
+                </div>
             ) : (
                 <>
                     <TetrisLoader message={'Connexion en cours...'}/>

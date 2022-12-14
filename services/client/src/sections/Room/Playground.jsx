@@ -25,7 +25,7 @@ export default function Playground() {
     const renderGrid = useMemo(() => <Grid grid={grid}/>, [ grid ])
 
     return (
-        <div className={'h-screen outline-0'} tabIndex={0}>
+        <div className={'outline-0'} tabIndex={0}>
             {renderGrid}
             <ModalGameFinish
                 onRestart={handleRestartGame}

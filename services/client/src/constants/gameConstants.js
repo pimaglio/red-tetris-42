@@ -6,7 +6,7 @@ export const GRID_HEIGHT = 20
 export const TETRIMINO_COLLECTION = {
     0: {
         shape: [[0]],
-        color: 'bg-slate-100',
+        color: 'bg-slate-100/[.06]',
     },
     I: {
         shape: [
@@ -15,7 +15,7 @@ export const TETRIMINO_COLLECTION = {
             [0, 0, 0, 0],
             [0, 0, 0, 0],
         ],
-        color: 'bg-sky-400',
+        color: 'bg-sky-300',
     },
     J: {
         shape: [
@@ -23,7 +23,7 @@ export const TETRIMINO_COLLECTION = {
             ['J', 'J', 'J'],
             [0, 0, 0],
         ],
-        color: 'bg-blue-400',
+        color: 'bg-blue-500',
 
     },
     L: {
@@ -40,7 +40,7 @@ export const TETRIMINO_COLLECTION = {
             [0, 'O', 'O', 0],
             [0, 0, 0 , 0],
         ],
-        color: 'bg-yellow-300',
+        color: 'bg-yellow-400',
     },
     S: {
         shape: [
@@ -56,7 +56,7 @@ export const TETRIMINO_COLLECTION = {
             ['T', 'T', 'T'],
             [0, 0, 0],
         ],
-        color: 'bg-purple-400',
+        color: 'bg-purple-300',
     },
     Z: {
         shape: [
