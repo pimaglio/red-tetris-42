@@ -18,28 +18,32 @@ const roomSlice = createSlice({
     name: 'room',
     initialState,
     reducers: {
-        setError: (state,action) => {
-          state.error = action.payload
+        setError: ( state, action ) => {
+            state.error = action.payload
         },
-        startGame: () => {
-
+        startGame: (state, action) => {
+            console.log('startGame', action)
         },
         setConnexion: ( state, action ) => {
             const { roomLeader, playerList, name } = action.payload.room
             state.isConnected = true
-            state.playerList = playerList
+            state.playerList = action.payload.playerList
             state.roomName = name
             state.playerName = action.payload.playerName
             state.roomLeader = roomLeader
         },
-        setDisconnect: () => ({...initialState}),
-        updateRoomLeader: (state, action) => {
+        setDisconnect: () => ({ ...initialState }),
+        updateRoomLeader: ( state, action ) => {
             state.roomLeader = action.payload
         },
-        updatePlayerList: (state,action) => {
+        updatePlayerList: ( state, action ) => {
             state.playerList = action.payload
         },
-        setReplayGame: (state, action) => {
+        updatePlayer: ( state, action ) => {
+            let playerIndex = state.playerList.findIndex(player => player.socketId === action.payload.socketId)
+            if (playerIndex > -1) state.playerList[playerIndex] = action.payload
+        },
+        setReplayGame: ( state, action ) => {
             state.replayGame = true
         }
     }

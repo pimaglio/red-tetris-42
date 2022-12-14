@@ -74,9 +74,7 @@ export const checkCollision = (block, grid, { x: moveX, y: moveY }) => {
 
 export const buildNewGrid = (grid, blockList, callback) => {
     // First flush the stage
-    console.log('BIUILD NEW GRID',blockList)
     const newGrid = grid.map((row) => row.map((cell) => (cell[1] === 'clear' ? [0, 'clear'] : cell)));
-
 
     // const getPrediction = () => {
     //   let newBlock = JSON.parse(JSON.stringify(block))
@@ -119,7 +117,6 @@ export const buildNewGrid = (grid, blockList, callback) => {
 
 
     if (needCheckCompleteLine) {
-        console.log('SWEEP ROW')
         return checkAndCleanCompleteLine(newGrid, callback)
     }
 

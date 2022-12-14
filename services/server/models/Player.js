@@ -1,4 +1,4 @@
-const { BLOCK_LIST_LIMIT } = require("../constants");
+const { BLOCK_LIST_LIMIT, GRID_WIDTH } = require("../constants");
 
 // ----------------------------------------------------------------------
 
@@ -9,7 +9,7 @@ class Player {
     this.gameResult = ''
     this.socketId = socketId
     this.blockListIndex = 10
-    this.spectra = []
+    this.spectra = new Array(GRID_WIDTH).fill(-1)
     this.isConnected = true
   }
 

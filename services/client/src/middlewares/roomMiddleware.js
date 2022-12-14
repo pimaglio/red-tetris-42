@@ -9,7 +9,8 @@ const roomMiddleware = socket => {
         socket.onAny((eventName, payload) => {
             switch (eventName) {
                 case 'gameStarted': {
-                    break
+                    console.log('gameStarted', payload)
+                    return dispatch(roomActions.startGame(payload))
                 }
                 case 'playerDisconnection': {
                     dispatch(roomActions.updatePlayerList(payload.playerList))
@@ -17,8 +18,10 @@ const roomMiddleware = socket => {
                     break
                 }
                 case 'replayGame': {
-                    dispatch(roomActions.setReplayGame())
-                    break
+                    return dispatch(roomActions.setReplayGame())
+                }
+                case 'updatePlayer': {
+                    return dispatch(roomActions.updatePlayer(payload))
                 }
             }
         });

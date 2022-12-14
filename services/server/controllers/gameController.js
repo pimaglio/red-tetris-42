@@ -2,6 +2,7 @@
 const { getRoom } = require("./roomController");
 // constants
 const { verbose, BLOCK_LIST_LIMIT, BLOCK_LIST_LIMIT_THRESHOLD } = require("../constants");
+const { buildGridSpectra } = require("../helpers/gameHelpers");
 
 // ----------------------------------------------------------------------
 
@@ -77,11 +78,20 @@ const completeLine = (socket, io) => {
     io.in(socket.data.roomName).emit('setPenaltyLine', {playerName: player.name})
 }
 
+const onUpdateGrid = (socket, data, io) => {
+    const room = getRoom(socket.data.roomName)
+    const player = room.game.getPlayer(socket.id)
+    const spectra = buildGridSpectra(data)
+    player.setSpectra(spectra)
+    io.in(socket.data.roomName).emit('updatePlayer', player)
+}
+
 module.exports = {
     startGame,
     restartGame,
     updateSpectra,
     getNextBlockList,
     gameOver,
-    completeLine
+    completeLine,
+    onUpdateGrid
 }

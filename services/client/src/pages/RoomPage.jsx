@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useOverlayTriggerState } from "react-stately";
@@ -10,6 +10,7 @@ import RoomModalError from "../sections/Room/ModalError.jsx";
 import Playground from "../sections/Room/Playground.jsx";
 // components
 import TetrisLoader from "../components/shared/Loading/TetrisLoading";
+import PlayerList from "../components/playerList/index.jsx";
 
 
 // ----------------------------------------------------------------------
@@ -17,28 +18,28 @@ import TetrisLoader from "../components/shared/Loading/TetrisLoading";
 export default function RoomPage() {
     let state = useOverlayTriggerState({});
     const { roomName, playerName } = useParams();
-    const { isConnected, error } = useSelector(state => state.room)
+    const { isConnected, error, playerList } = useSelector(state => state.room)
     const dispatch = useDispatch()
 
     useEffect(() => {
         if (error) state.open()
-    }, [error])
+    }, [ error ])
 
     useEffect(() => {
-        if (!isConnected) dispatch(roomActions.setConnexion({roomName, playerName}))
+        if (!isConnected) dispatch(roomActions.setConnexion({ roomName, playerName }))
         else if (isConnected) toast.success(`You join the ${roomName} room`)
     }, [ isConnected, playerName, roomName ])
 
-    if (isConnected) return (
-        <div className="flex flex-col items-center max-w-lg mx-auto">
-            <Playground/>
-        </div>
-    )
-
     return (
-        <div className="flex flex-col items-center max-w-lg mx-auto">
-            <TetrisLoader message={'Connexion en cours...'}/>
-            <RoomModalError error={error} state={state} playerName={playerName} roomName={roomName}/>
+        <div className="relative bg-[radial-gradient(145.05%_100%_at_50%_0%,#1D2B41_0%,#020509_57.38%,#0F1A29_88.16%)]">
+            {isConnected ? (
+                <Playground/>
+            ) : (
+                <>
+                    <TetrisLoader message={'Connexion en cours...'}/>
+                    <RoomModalError error={error} state={state} playerName={playerName} roomName={roomName}/>
+                </>
+            )}
         </div>
     )
 }

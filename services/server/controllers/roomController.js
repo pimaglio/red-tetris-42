@@ -27,7 +27,7 @@ const joinRoom = ( socket, data ) => {
     socket.join(roomName)
     socket.data.roomName = roomName
     loggerAction({ isEnd: true, message: 'connected success' })
-    return { player, room }
+    return { player, room, playerList: room.game.playerList }
 }
 
 const userDisconnect = (socket, data, io) => {

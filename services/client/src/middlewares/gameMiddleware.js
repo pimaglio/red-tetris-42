@@ -52,9 +52,7 @@ const gameMiddleware = socket => {
                         let { x, y, isHardDrop } = action.payload
                         if (isHardDrop) {
                             y = getHardDropPosition(game.currentBlock, game.grid) || 1
-                            console.log('Y', y)
                             action.payload.y = y
-                            console.log('ACTION PAYLOAD Y', action.payload.y)
                         }
                         const isCollided = checkCollision(game.currentBlock, game.grid, { x, y })
                         if (isCollided && isCollided !== 'out' && game.currentBlock.pos.y === 0) return dispatch(gameActions.stopGame())
@@ -66,7 +64,6 @@ const gameMiddleware = socket => {
                             }
                             next(action)
                             dispatch(gameActions.updateGrid())
-                            console.log('IS COLLIDED', isCollided, y)
                             if (isCollided && y > 0) {
                                 dispatch(gameActions.getNextBlock())
                             }
@@ -94,7 +91,7 @@ const gameMiddleware = socket => {
                         grid
                     }
                     if (countLineComplete) socket.emit('completeLine')
-                    console.log('countLineComplete', countLineComplete)
+                    if (game.currentBlock.collided) socket.emit('updateGrid', grid)
                     return next(action)
                 }
                 case 'game/rotateBlock': {
