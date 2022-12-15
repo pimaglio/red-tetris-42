@@ -79,11 +79,11 @@ export const GAME_RESULT_LIST = {
     'loser': {
         text: 'Loser',
         color: 'bg-red-500/[.1]',
-        textColor: 'text-red-800'
+        textColor: 'text-red-700'
     },
     'winner': {
         text: 'Winner',
-        color: 'bg-green-300/[.06]',
-        textColor: 'text-green-800'
+        color: 'bg-green-400/[.06]',
+        textColor: 'text-green-700'
     },
 }

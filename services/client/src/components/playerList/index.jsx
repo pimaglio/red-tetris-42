@@ -9,30 +9,33 @@ export default function PlayerList( { playerList } ) {
     console.log('PLAYER LIST UPDATE', playerList)
 
     return (
-        <div className={'w-1/5 text-left'}>
+        <div className={'w-1/5 text-left min-w-fit'}>
             <h3 className={'px-2 text-lg font-semibold text-white'}>All players</h3>
-            <div className="mt-4 bg-container sm:rounded-2xl">
-
-
+            <div className="mt-4 bg-container sm:rounded-2xl max-h-[90%] overflow-y-auto">
                 <div className="overflow-x-auto relative shadow-md sm:rounded-lg pb-2">
                     <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                         <thead
                             className="text-xs text-gray-700 uppercase dark:text-gray-400 border-b dark:border-gray-800">
                         <tr>
+                            <th scope="col" className="py-3 px-6 text-center">
+                                Spectra
+                            </th>
                             <th scope="col" className="py-3 px-6">
                                 Username
                             </th>
                             <th scope="col" className="py-3 px-6">
                                 Result
                             </th>
-                            <th scope="col" className="py-3 px-6 text-center">
-                                Spectra
-                            </th>
                         </tr>
                         </thead>
-                        <tbody>
+                        <tbody className={''}>
                         {playerList?.map(( player, id ) => (
                             <tr key={`player-${player.socketId}-${id}`} className={`hover:bg-gray-5 ${id < playerList.length - 1 ? 'border-b dark:border-gray-800' : ''}`}>
+                                <td>
+                                    <div className={'max-w-xs flex justify-center py-2'}>
+                                        <Grid grid={grid} spectra={player.spectra}/>
+                                    </div>
+                                </td>
                                 <td className="py-4 px-6 font-semibold text-gray-900 dark:text-white">
                                     <div className="flex items-center">
                                         <div
@@ -42,12 +45,7 @@ export default function PlayerList( { playerList } ) {
                                 </td>
                                 <td className="py-4 px-6 font-semibold text-gray-900 dark:text-white">
                                 <span
-                                    className={`${GAME_RESULT_LIST[player.gameResult].color} text-xs font-semibold mr-2 px-2.5 py-0.5 rounded`}>{GAME_RESULT_LIST[player.gameResult].text}</span>
-                                </td>
-                                <td>
-                                    <div className={'max-w-xs flex justify-center py-2'}>
-                                        <Grid grid={grid} spectra={player.spectra}/>
-                                    </div>
+                                    className={`${GAME_RESULT_LIST[player.gameResult].color} ${GAME_RESULT_LIST[player.gameResult].textColor} text-xs font-semibold mr-2 px-2.5 py-0.5 rounded`}>{GAME_RESULT_LIST[player.gameResult].text}</span>
                                 </td>
                             </tr>
                         ))}

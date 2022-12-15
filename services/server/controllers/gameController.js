@@ -69,6 +69,7 @@ const gameOver = ( socket, io ) => {
             io.in(socket.data.roomName).emit('gameRestarted')
         }
     }
+    io.in(socket.data.roomName).emit('updatePlayer', player)
     return gameResult
 }
 
