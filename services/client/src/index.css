@@ -47,3 +47,26 @@ body {
   min-width: 320px;
   min-height: 100vh;
 }
+
+
+.background-gradient {
+  overflow: hidden;
+  opacity: .2;
+  background: conic-gradient(from 180deg at 50% 50%,#2a8af6 0deg,#a853ba 180deg,#e92a67 1turn);
+  width: 1000px;
+  height: 1000px;
+  border-radius: 100%;
+  filter: blur(75px);
+  will-change: filter;
+  position: absolute;
+  top: -731px;
+  z-index: 10;
+}
+
+.logo-title {
+  text-shadow: 0 0 5px #ffffff29;
+}
+
+.logo-sub-title {
+  text-shadow: 0 0 5px #ffffff5e;
+}

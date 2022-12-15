@@ -13,11 +13,11 @@ export default function RoomConnexionForm( props ) {
 
     return (
         <div className="mt-5 md:col-span-2 md:mt-0">
-            <h2 className="text-lg font-bold pb-2">
+            <h2 className="text-lg font-bold pb-2 text-white">
                 Create or join room
             </h2>
-            <form onSubmit={handleSubmit} className="overflow-hidden shadow sm:rounded-md mt-2">
-                <div className="bg-white px-4 py-5 sm:p-6">
+            <form onSubmit={handleSubmit} className="overflow-hidden shadow sm:rounded-md mt-2 bg-container">
+                <div className="px-4 py-5 sm:p-6 border-b dark:border-gray-800">
                     <div className="grid grid-cols-6 gap-6">
                         <div className="col-span-6 sm:col-span-3">
                             <TextInput
@@ -39,7 +39,7 @@ export default function RoomConnexionForm( props ) {
                         </div>
                     </div>
                 </div>
-                <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">
+                <div className="px-4 py-3 text-right sm:px-6 flex justify-end">
                     <Button variant={'cta'} type={'submit'}>Join room</Button>
                 </div>
             </form>
