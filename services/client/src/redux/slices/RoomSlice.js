@@ -8,7 +8,7 @@ const initialState = {
     roomName: null,
     playerName: null,
     roomLeader: null,
-    playerList: null,
+    playerList: [],
     replayGame: false
 }
 
@@ -42,6 +42,9 @@ const roomSlice = createSlice({
         updatePlayer: ( state, action ) => {
             let playerIndex = state.playerList.findIndex(player => player.socketId === action.payload.socketId)
             if (playerIndex > -1) state.playerList[playerIndex] = action.payload
+        },
+        addPlayer: (state, action) => {
+          state.playerList.push(action.payload)
         },
         setReplayGame: ( state, action ) => {
             state.replayGame = true

@@ -5,8 +5,8 @@ import { gameActions } from "../redux/slices/GameSlice.js";
 // ----------------------------------------------------------------------
 
 const roomMiddleware = socket => {
-    return ({dispatch, getState}) => {
-        socket.onAny((eventName, payload) => {
+    return ( { dispatch, getState } ) => {
+        socket.onAny(( eventName, payload ) => {
             switch (eventName) {
                 case 'gameStarted': {
                     console.log('gameStarted', payload)
@@ -23,6 +23,11 @@ const roomMiddleware = socket => {
                 case 'updatePlayer': {
                     return dispatch(roomActions.updatePlayer(payload))
                 }
+                case 'addPlayer': {
+                    const { room } = getState()
+                    if (payload.name !== room.playerName) return dispatch(roomActions.addPlayer(payload))
+                    break
+                }
             }
         });
         return next => action => {
@@ -33,9 +38,9 @@ const roomMiddleware = socket => {
                     break
                 }
                 case 'room/setConnexion': {
-                    const {roomName, playerName} = action.payload
+                    const { roomName, playerName } = action.payload
                     if (room.error) dispatch(roomActions.setError(null))
-                    socket.emit('joinRoom', {roomName, playerName}, ( data ) => {
+                    socket.emit('joinRoom', { roomName, playerName }, ( data ) => {
                         if (data.error) return dispatch(roomActions.setError(data.error))
                         action.payload = {
                             ...action.payload,
@@ -49,7 +54,8 @@ const roomMiddleware = socket => {
                     socket.emit('playerLeave')
                     return next(action)
                 }
-                default: return next(action)
+                default:
+                    return next(action)
             }
         }
     }

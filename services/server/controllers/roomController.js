@@ -17,7 +17,7 @@ const getRoom = roomName => {return roomList.find(room => room.name === roomName
 
 const removeRoom = roomName => roomList = roomList.filter(room => room.name !== roomName)
 
-const joinRoom = ( socket, data ) => {
+const joinRoom = ( socket, data, io ) => {
     const { roomName, playerName } = data
     loggerAction({ ...data, isGroup: true, type: 'joinRoom', message: 'try to connect' })
     let room = getRoom(roomName) ? getRoom(roomName) : createRoom(roomName, playerName)
@@ -27,6 +27,7 @@ const joinRoom = ( socket, data ) => {
     socket.join(roomName)
     socket.data.roomName = roomName
     loggerAction({ isEnd: true, message: 'connected success' })
+    io.in(socket.data.roomName).emit('addPlayer', player)
     return { player, room, playerList: room.game.playerList }
 }
 

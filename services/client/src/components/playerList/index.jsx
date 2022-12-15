@@ -1,21 +1,60 @@
 import Grid from "../playground/Grid.jsx";
 import { createGrid } from "../../helpers/gameHelper.js";
+import { GAME_RESULT_LIST } from "../../constants/gameConstants.js";
+import { truncate } from "../../utils/string.js";
 
 export default function PlayerList( { playerList } ) {
     const grid = createGrid()
 
-    return (
-        <div className="-mx-px text-left bg-[radial-gradient(145.05%_100%_at_50%_0%,#1D2B41_0%,#0B1627_57.38%,#142133_88.16%)] p-6 shadow-2xl ring-1 ring-white/[0.15] sm:mx-0 sm:rounded-2xl sm:p-8 lg:p-10">
-            <h3 className={'text-lg font-semibold text-white'}>Room player list</h3>
-            {playerList?.map(player => (
-                <div key={player.socketId} className={'flex justify-around'}>
-                    <div className={'relative -mx-5 mt-8 flex flex-col bg-slate-700/25 py-8 px-5 ring-1 ring-slate-700/50 sm:mx-0 sm:rounded-2xl'}>
-                        <p className={'font-semibold text-slate-100'}>{player.name}</p>
-                    </div>
+    console.log('PLAYER LIST UPDATE', playerList)
 
-                    {/*<Grid grid={grid} spectra={player.spectra}/>*/}
+    return (
+        <div className={'w-1/5 text-left'}>
+            <h3 className={'px-2 text-lg font-semibold text-white'}>All players</h3>
+            <div className="mt-4 bg-container sm:rounded-2xl">
+
+
+                <div className="overflow-x-auto relative shadow-md sm:rounded-lg pb-2">
+                    <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                        <thead
+                            className="text-xs text-gray-700 uppercase dark:text-gray-400 border-b dark:border-gray-800">
+                        <tr>
+                            <th scope="col" className="py-3 px-6">
+                                Username
+                            </th>
+                            <th scope="col" className="py-3 px-6">
+                                Result
+                            </th>
+                            <th scope="col" className="py-3 px-6 text-center">
+                                Spectra
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {playerList?.map(( player, id ) => (
+                            <tr key={`player-${player.socketId}-${id}`} className={`hover:bg-gray-5 ${id < playerList.length - 1 ? 'border-b dark:border-gray-800' : ''}`}>
+                                <td className="py-4 px-6 font-semibold text-gray-900 dark:text-white">
+                                    <div className="flex items-center">
+                                        <div
+                                            className={`h-2.5 w-2.5 rounded-full ${player.isConnected ? 'bg-green-400' : 'bg-red-500'} mr-2`}></div>
+                                        <p title={player.name}>{truncate(player.name, 20)}</p>
+                                    </div>
+                                </td>
+                                <td className="py-4 px-6 font-semibold text-gray-900 dark:text-white">
+                                <span
+                                    className={`${GAME_RESULT_LIST[player.gameResult].color} text-xs font-semibold mr-2 px-2.5 py-0.5 rounded`}>{GAME_RESULT_LIST[player.gameResult].text}</span>
+                                </td>
+                                <td>
+                                    <div className={'max-w-xs flex justify-center py-2'}>
+                                        <Grid grid={grid} spectra={player.spectra}/>
+                                    </div>
+                                </td>
+                            </tr>
+                        ))}
+                        </tbody>
+                    </table>
                 </div>
-            ))}
+            </div>
         </div>
     )
 }

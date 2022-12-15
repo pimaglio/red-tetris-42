@@ -69,3 +69,21 @@ export const TETRIMINO_COLLECTION = {
 }
 
 export const TEST_GRID_FULL = [[[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],["S","clear"],["S","clear"],[0,"clear"],[0,"clear"],[0,"clear"]],[[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],["S","clear"],["S","clear"],["L","merged"],[0,"clear"],[0,"clear"],[0,"clear"]],[[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],["L","merged"],["L","merged"],["L","merged"],[0,"clear"],[0,"clear"],[0,"clear"]],[[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],["S","merged"],["S","merged"],[0,"clear"],[0,"clear"],[0,"clear"]],[[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],["S","merged"],["S","merged"],[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"]],[[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],["T","merged"],[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"]],[[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],["T","merged"],["T","merged"],["T","merged"],[0,"clear"],[0,"clear"],[0,"clear"]],[[0,"clear"],[0,"clear"],[0,"clear"],["I","merged"],["I","merged"],["I","merged"],["I","merged"],[0,"clear"],[0,"clear"],[0,"clear"]],[[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],["L","merged"],[0,"clear"],[0,"clear"],[0,"clear"]],[[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],["L","merged"],["L","merged"],["L","merged"],[0,"clear"],[0,"clear"],[0,"clear"]],[[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],["L","merged"],[0,"clear"],[0,"clear"],[0,"clear"]],[[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],["L","merged"],["L","merged"],["L","merged"],[0,"clear"],[0,"clear"],[0,"clear"]],[[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],["Z","merged"],["Z","merged"],[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"]],[[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],["Z","merged"],["Z","merged"],[0,"clear"],[0,"clear"],[0,"clear"]],[[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],["L","merged"],[0,"clear"],[0,"clear"],[0,"clear"]],[[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],["L","merged"],["L","merged"],["L","merged"],[0,"clear"],[0,"clear"],[0,"clear"]],[[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],["O","merged"],["O","merged"],[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"]],[[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],["O","merged"],["O","merged"],[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"]],[[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],["S","merged"],["S","merged"],[0,"clear"],[0,"clear"],[0,"clear"]],[[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"],["S","merged"],["S","merged"],[0,"clear"],[0,"clear"],[0,"clear"],[0,"clear"]]]
+
+export const GAME_RESULT_LIST = {
+    '': {
+        text: 'In progress',
+        color: 'bg-slate-100/[.06]',
+        textColor: 'text-slate-100'
+    },
+    'loser': {
+        text: 'Loser',
+        color: 'bg-red-500/[.1]',
+        textColor: 'text-red-800'
+    },
+    'winner': {
+        text: 'Winner',
+        color: 'bg-green-300/[.06]',
+        textColor: 'text-green-800'
+    },
+}
