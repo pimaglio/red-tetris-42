@@ -29,7 +29,7 @@ export function Button(props) {
             }}
             disabled={props.isLoading}
             type={props.type || 'button'}
-            className={`flex items-center ${focus} text-sm font-semibold py-2 px-4 rounded cursor-default hover:bg-red-900 focus:outline-none transition ${bg} cursor-pointer ${disabled}`}
+            className={`flex items-center ${focus} text-base font-semibold py-2 px-4 rounded cursor-default hover:bg-red-900 focus:outline-none transition ${bg} cursor-pointer ${disabled}`}
         >
             {props.children}
             {props.isLoading ? <LoadingSpinner color={props.loadingColor} size={props.loadingSize}/> : null}

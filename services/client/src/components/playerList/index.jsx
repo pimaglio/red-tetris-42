@@ -10,7 +10,7 @@ export default function PlayerList( { playerList } ) {
 
     return (
         <div className={'w-1/5 text-left min-w-fit'}>
-            <h3 className={'px-2 text-lg font-semibold text-white'}>All players</h3>
+            <h3 className={'px-2 text-lg font-semibold text-white'}>All players ({playerList.length})</h3>
             <div className="mt-4 bg-container sm:rounded-2xl max-h-[90%] overflow-y-auto">
                 <div className="overflow-x-auto relative shadow-md sm:rounded-lg pb-2">
                     <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">

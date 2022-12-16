@@ -26,7 +26,18 @@ export default function Playground() {
 
     return (
         <div className={'w-3/4 outline-0'} tabIndex={0}>
-            {renderGrid}
+            <div className={'relative w-fit'}>
+                {renderGrid}
+                {(roomLeader === playerName && !dropTime) ? (
+                    <div className={'absolute top-0 w-full h-full flex items-center justify-center'}>
+                        <Button
+                            onKeyDown={( e ) => e.preventDefault()}
+                            variant='cta' onPress={handleStartGame}>Start game
+                        </Button>
+                    </div>
+                ) : null}
+            </div>
+
             <ModalGameFinish
                 onRestart={handleRestartGame}
                 state={state}
@@ -34,10 +45,7 @@ export default function Playground() {
                 gameResult={gameResult}
                 isRoomLeader={roomLeader === playerName}
             />
-            {roomLeader === playerName ? (
-                <Button onKeyDown={( e ) => e.preventDefault()} variant='cta' onPress={handleStartGame}>Start
-                    game</Button>
-            ) : null}
+
 
         </div>
 
