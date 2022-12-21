@@ -16,7 +16,7 @@ export default function TextInput({label, onChange, value, name, refInput, requi
                     type="text"
                     name={name}
                     id={name}
-                    className="bg-container-light appearance-none border border-gray-700 rounded w-full py-2 px-4 text-white leading-tight focus:outline-none focus:border-red-900/[.5] focus:shadow-outline transition ease-in-out duration-150"
+                    className="bg-slate-100/5 appearance-none border border-gray-700 rounded w-full py-2 px-4 text-white leading-tight focus:outline-none focus:border-red-900/[.5] focus:shadow-outline transition ease-in-out duration-150"
                 />
             </div>
         </>

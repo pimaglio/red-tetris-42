@@ -29,7 +29,7 @@ export default function Modal(props) {
                 }}
             >
                 <div
-                    className="fixed inset-0 flex justify-center z-100 bg-slate-400/20"
+                    className="fixed inset-0 flex justify-center z-100 bg-black/20"
                     {...underlayProps}
                 >
                     {/* Animate modal slightly upward when entering, and downward when exiting. */}
@@ -47,7 +47,7 @@ export default function Modal(props) {
                         <div
                             {...modalProps}
                             ref={ref}
-                            className="p-8 min-w-500 max-w-md bg-white/90 border border-gray-300 shadow-2xl rounded-lg z-1 top-[10%] h-fit max-h-[80vh] relative focus:outline-none"
+                            className="p-8 min-w-500 max-w-md bg-background shadow-2xl rounded-lg z-1 top-[10%] h-fit max-h-[80vh] relative focus:outline-none"
                         >
                             {children}
                         </div>

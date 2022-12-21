@@ -22,7 +22,7 @@ export default function AlertDialog(props) {
             {props.variant === "destructive" || props.icon === 'warning' && (
                 <ExclamationIcon className="w-6 h-6 text-red-500 absolute right-8 top-8" />
             )}
-            <h3 {...titleProps} className="text-lg font-medium pb-2">
+            <h3 {...titleProps} className="text-lg font-medium pb-2 text-white">
                 {props.title}
             </h3>
             <div>

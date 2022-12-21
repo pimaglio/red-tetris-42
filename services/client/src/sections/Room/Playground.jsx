@@ -14,7 +14,7 @@ import useGame from "../../hooks/useGame.js";
 export default function Playground() {
     let state = useOverlayTriggerState({});
     const { grid, dropTime, gameResult } = useSelector(state => state.game)
-    const { roomLeader, playerName, replayGame } = useSelector(state => state.room)
+    const { roomLeader, playerName, replayGame, roomName } = useSelector(state => state.room)
     const { handleStartGame, handleRestartGame } = useGame({ dropTime })
 
     useEffect(() => {
@@ -25,9 +25,13 @@ export default function Playground() {
     const renderGrid = useMemo(() => <Grid grid={grid}/>, [ grid ])
 
     return (
-        <div className={'w-3/4 outline-0'} tabIndex={0}>
-            <div className={'relative w-fit'}>
-                {renderGrid}
+        <div className={'w-3/4 outline-0 flex justify-center'} tabIndex={0}>
+            <div className={'relative w-fit h-fit'}>
+                <h3 className={'text-left mb-4 px-2 text-lg font-semibold text-white'}>{`Playground ${roomLeader}`}</h3>
+                <div className="p-4 bg-container sm:rounded-2xl max-h-[90%] overflow-y-auto">
+                    {renderGrid}
+                </div>
+
                 {(roomLeader === playerName && !dropTime) ? (
                     <div className={'absolute top-0 w-full h-full flex items-center justify-center'}>
                         <Button

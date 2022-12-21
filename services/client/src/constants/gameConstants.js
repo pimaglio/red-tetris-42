@@ -6,7 +6,8 @@ export const GRID_HEIGHT = 20
 export const TETRIMINO_COLLECTION = {
     0: {
         shape: [[0]],
-        color: 'bg-slate-100/[.06]',
+        //color: 'bg-slate-100/[.03]',
+        color: 'bg-background',
     },
     I: {
         shape: [
@@ -77,7 +78,7 @@ export const GAME_RESULT_LIST = {
         textColor: 'text-slate-100'
     },
     'loser': {
-        text: 'Loser',
+        text: 'Lost',
         color: 'bg-red-500/[.1]',
         textColor: 'text-red-700'
     },

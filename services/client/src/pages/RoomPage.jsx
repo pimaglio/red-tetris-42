@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useOverlayTriggerState } from "react-stately";
@@ -11,6 +11,7 @@ import Playground from "../sections/Room/Playground.jsx";
 // components
 import TetrisLoader from "../components/shared/Loading/TetrisLoading";
 import PlayerList from "../components/playerList/index.jsx";
+import Logo from "../components/shared/Logo.jsx";
 
 
 // ----------------------------------------------------------------------
@@ -32,8 +33,12 @@ export default function RoomPage() {
 
     return (
         <div className="relative bg-background">
+            <div className={'background-gradient room'}/>
+            <div className={'absolute top-8 left-8'}>
+                <Logo/>
+            </div>
             {isConnected ? (
-                <div className={'h-screen p-5 flex justify-between'}>
+                <div className={'h-screen p-5 flex justify-center'}>
                     <Playground/>
                     <PlayerList playerList={playerList}/>
                 </div>

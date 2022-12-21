@@ -51,7 +51,7 @@ export default function RoomModalError(props) {
                 onClose={handleClose}
                 onConfirm={handleSubmit}
             >
-                <p className={'text-sm text-gray-600'}>{ROOM_ERROR_LIST[props.error].message(props)}</p>
+                <p className={'text-sm text-gray-300'}>{ROOM_ERROR_LIST[props.error].message(props)}</p>
                 <form className={'mt-4'} onSubmit={handleSubmit}>
                     <input type={'submit'} hidden/>
                     <TextInput required refInput={inputRef} label={ROOM_ERROR_LIST[props.error].inputLabel} name={ROOM_ERROR_LIST[props.error].inputName}/>
