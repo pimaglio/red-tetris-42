@@ -31,7 +31,7 @@ export default function useGame( { dropTime, game, grid } ) {
     }
 
     const handleMoveBlock = ( x, y ) => {
-        dispatch(gameActions.updateCurrentBlockPosition({ x, y }))
+        dispatch(gameActions.updateCurrentBlockPosition({ x, y, isKeyPress: true }))
     }
 
     const handleHardDrop = () => {

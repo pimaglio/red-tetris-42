@@ -5,6 +5,15 @@ const TETRIMINO_LIST_SHAPE = 'OIJLSTZ'
 const GRID_WIDTH = 10
 const GRID_HEIGHT = 20
 
+const LINES_POINT = {
+    1: 40,
+    2: 100,
+    3: 300,
+    4: 1200
+}
+
+const CALC_LINE_SCORE_FORMULA = (level, linePoint) => linePoint * (level + 1)
+
 const TETRIMINO_LIST = {
     0: {
         shape: [[0]],
@@ -70,5 +79,14 @@ const TETRIMINO_LIST = {
 }
 const verbose = process.env.NODE_ENV === 'development'
 module.exports = {
-    GRID_WIDTH, GRID_HEIGHT, verbose, TETRIMINO_LIST_SHAPE, BLOCK_LIST_LIMIT, TETRIMINO_LIMIT_CREATION_COUNT, TETRIMINO_LIST, BLOCK_LIST_LIMIT_THRESHOLD
+    GRID_WIDTH,
+    GRID_HEIGHT,
+    verbose,
+    TETRIMINO_LIST_SHAPE,
+    BLOCK_LIST_LIMIT,
+    TETRIMINO_LIMIT_CREATION_COUNT,
+    TETRIMINO_LIST,
+    BLOCK_LIST_LIMIT_THRESHOLD,
+    LINES_POINT,
+    CALC_LINE_SCORE_FORMULA
 }

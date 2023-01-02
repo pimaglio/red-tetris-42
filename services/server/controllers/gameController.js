@@ -1,7 +1,13 @@
 // controllers
 const { getRoom } = require("./roomController");
 // constants
-const { verbose, BLOCK_LIST_LIMIT, BLOCK_LIST_LIMIT_THRESHOLD } = require("../constants");
+const {
+    verbose,
+    BLOCK_LIST_LIMIT,
+    BLOCK_LIST_LIMIT_THRESHOLD,
+    CALC_LINE_SCORE_FORMULA,
+    LINES_POINT
+} = require("../constants");
 const { buildGridSpectra } = require("../helpers/gameHelpers");
 
 // ----------------------------------------------------------------------
@@ -26,8 +32,7 @@ const restartGame = ( socket, io ) => {
     } else if (!isGameWinner && isRoomLeader) {
         room.game.setRestartGame()
         io.in(socket.data.roomName).emit('replayGame')
-    }
-    else socket.emit('gameRestarted')
+    } else socket.emit('gameRestarted')
 }
 
 const getNextBlockList = ( socket ) => {
@@ -73,18 +78,48 @@ const gameOver = ( socket, io ) => {
     return gameResult
 }
 
-const completeLine = (socket, io) => {
+const completeLine = ( socket, io ) => {
     const room = getRoom(socket.data.roomName)
     const player = room.game.getPlayer(socket.id)
-    io.in(socket.data.roomName).emit('setPenaltyLine', {playerName: player.name})
+    io.in(socket.data.roomName).emit('setPenaltyLine', { playerName: player.name })
 }
 
-const onUpdateGrid = (socket, data, io) => {
+const onUpdateGrid = ( socket, data, io ) => {
     const room = getRoom(socket.data.roomName)
     const player = room.game.getPlayer(socket.id)
     const spectra = buildGridSpectra(data)
     player.setSpectra(spectra)
     io.in(socket.data.roomName).emit('updatePlayer', player)
+}
+
+const updateScore = ( socket, data, callback ) => {
+    const room = getRoom(socket.data.roomName)
+    const player = room.game.getPlayer(socket.id)
+    let scoreType, scoreValue = null
+    const { actionType, actionValue } = data
+    switch (actionType) {
+        case 'hardDrop': {
+            scoreType = 'score'
+            scoreValue = actionValue * 2
+            break
+        }
+        case 'softDrop': {
+            scoreType = 'score'
+            scoreValue = 1
+            break
+        }
+        case 'lineCleared': {
+            scoreType = 'lines'
+            let linePoint = LINES_POINT[actionValue]
+            if (linePoint) scoreValue = CALC_LINE_SCORE_FORMULA(player.scoreBoard.level, linePoint)
+            break
+        }
+    }
+    if (scoreType && scoreValue) {
+        player.setScoreBoard('score', 50)
+        return ({ scoreType, scoreValue })
+    }
+    return null
 }
 
 module.exports = {
@@ -94,5 +129,6 @@ module.exports = {
     getNextBlockList,
     gameOver,
     completeLine,
-    onUpdateGrid
+    onUpdateGrid,
+    updateScore
 }

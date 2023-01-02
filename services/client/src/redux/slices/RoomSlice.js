@@ -9,7 +9,7 @@ const initialState = {
     playerName: null,
     roomLeader: null,
     playerList: [],
-    replayGame: false
+    replayGame: false,
 }
 
 // ----------------------------------------------------------------------

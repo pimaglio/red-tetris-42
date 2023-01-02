@@ -11,10 +11,19 @@ class Player {
     this.blockListIndex = 10
     this.spectra = new Array(GRID_WIDTH).fill(-1)
     this.isConnected = true
+    this.scoreBoard = {
+      score: 0,
+      level: 1,
+      lines: 0
+    }
   }
 
   setSpectra(spectra) {
     this.spectra = spectra
+  }
+
+  setScoreBoard(scoreType, scoreValue) {
+    this.scoreBoard[scoreType] += scoreValue
   }
 
   setGameResult(gameResult) {

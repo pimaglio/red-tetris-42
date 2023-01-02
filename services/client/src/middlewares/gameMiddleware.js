@@ -49,10 +49,19 @@ const gameMiddleware = socket => {
                 }
                 case 'game/updateCurrentBlockPosition': {
                     if (game.gameStatus === 'inProgress') {
-                        let { x, y, isHardDrop } = action.payload
+                        let { x, y, isHardDrop, isKeyPress } = action.payload
                         if (isHardDrop) {
-                            y = getHardDropPosition(game.currentBlock, game.grid) || 1
+                            const hardDropOffset = getHardDropPosition(game.currentBlock, game.grid) || 1
+                            y = hardDropOffset
                             action.payload.y = y
+                            if (hardDropOffset !== 1 && game.currentBlock.pos.y !== 1) {
+                                socket.emit('updateScore', {
+                                    actionType: 'hardDrop',
+                                    actionValue: hardDropOffset
+                                }, newScore => {
+                                    if (newScore) dispatch(gameActions.updateScore(newScore))
+                                })
+                            }
                         }
                         const isCollided = checkCollision(game.currentBlock, game.grid, { x, y })
                         if (isCollided && isCollided !== 'out' && game.currentBlock.pos.y === 0) return dispatch(gameActions.stopGame())
@@ -64,9 +73,10 @@ const gameMiddleware = socket => {
                             }
                             next(action)
                             dispatch(gameActions.updateGrid())
-                            if (isCollided && y > 0) {
-                                dispatch(gameActions.getNextBlock())
-                            }
+                            if (y > 0 && isCollided) dispatch(gameActions.getNextBlock())
+                            if (y > 0 && !isCollided && isKeyPress) socket.emit('updateScore', { actionType: 'softDrop', actionValue: null }, newScore => {
+                                if (newScore) dispatch(gameActions.updateScore(newScore))
+                            })
                         }
                     }
                     break

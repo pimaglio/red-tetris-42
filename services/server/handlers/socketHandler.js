@@ -1,6 +1,6 @@
 // controllers
 const { joinRoom, userDisconnect } = require('../controllers/roomController')
-const { getNextBlockList, startGame, updateSpectra, gameOver, restartGame, completeLine, onUpdateGrid } = require("../controllers/gameController");
+const { getNextBlockList, startGame, updateSpectra, gameOver, restartGame, completeLine, onUpdateGrid, updateScore } = require("../controllers/gameController");
 
 // ----------------------------------------------------------------------
 
@@ -34,6 +34,9 @@ const socketHandler = ( socket, io ) => {
     })
     socket.on('updateGrid', data => {
         onUpdateGrid(socket, data, io)
+    })
+    socket.on('updateScore', (data, callback) => {
+        callback(updateScore(socket, data))
     })
 }
 
