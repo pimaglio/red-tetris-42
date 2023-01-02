@@ -1,6 +1,5 @@
 // redux
 import { roomActions } from "../redux/slices/RoomSlice.js";
-import { gameActions } from "../redux/slices/GameSlice.js";
 
 // ----------------------------------------------------------------------
 
@@ -33,7 +32,7 @@ const roomMiddleware = socket => {
         return next => action => {
             const { room, game } = getState()
             switch (action.type) {
-                case 'room/startGame': {
+                    case 'room/startGame': {
                     socket.emit('startGame')
                     break
                 }
