@@ -72,6 +72,20 @@ export const checkCollision = (block, grid, { x: moveX, y: moveY }) => {
     return false
 }
 
+export const createPreviewGrid = () => Array.from({length: 4}, () => Array(4).fill([0, 'clear']))
+
+export const buildPreviewGrid = (grid, blockShape) => {
+    const block = TETRIMINO_COLLECTION[blockShape]?.shape || null
+    if (block) {
+        for (let i = 0; i < block.length; i++) {
+            for (let j = 0; j < block[i].length; j++) {
+                grid[i][j] = [ block[i][j],'clear'];
+            }
+        }
+    }
+    return grid
+}
+
 export const buildNewGrid = (grid, blockList, callback) => {
     // First flush the stage
     const newGrid = grid.map((row) => row.map((cell) => (cell[1] === 'clear' ? [0, 'clear'] : cell)));

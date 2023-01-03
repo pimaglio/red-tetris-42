@@ -9,6 +9,7 @@ import { DROP_TIME, TEST_GRID_FULL } from "../../constants/gameConstants.js";
 const initialState = {
     gameStatus: 'pending',
     currentBlock: null,
+    holdBlock: null,
     blockList: [],
     grid: createGridTest('completeLine', 17),
     dropTime: 0,
