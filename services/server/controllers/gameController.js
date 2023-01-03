@@ -116,11 +116,7 @@ const updateScore = ( socket, data ) => {
                     scoreValue: CALC_LINE_SCORE_FORMULA(player.scoreBoard.level, linePoint)
                 })
                 const nextLevel = Math.floor((player.scoreBoard.lines + actionValue) / 10) + 1
-                console.log('lines', actionValue)
-                console.log('total', actionValue)
-                console.log('NEXT LEVEL', nextLevel)
                 let diffLevel = nextLevel - player.scoreBoard.level
-                console.log('DIFF LEVEL', diffLevel)
                 if (diffLevel > 0) scoreList.push({ scoreType: 'level', scoreValue: diffLevel})
                 break
             }
