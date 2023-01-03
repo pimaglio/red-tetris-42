@@ -78,10 +78,11 @@ const gameOver = ( socket, io ) => {
     return gameResult
 }
 
-const completeLine = ( socket, io ) => {
+const completeLine = ( socket, data, io ) => {
     const room = getRoom(socket.data.roomName)
     const player = room.game.getPlayer(socket.id)
     io.in(socket.data.roomName).emit('setPenaltyLine', { playerName: player.name })
+    return updateScore(socket, { actionType: 'lineCleared', actionValue: data })
 }
 
 const onUpdateGrid = ( socket, data, io ) => {
@@ -92,34 +93,48 @@ const onUpdateGrid = ( socket, data, io ) => {
     io.in(socket.data.roomName).emit('updatePlayer', player)
 }
 
-const updateScore = ( socket, data, callback ) => {
+const updateScore = ( socket, data ) => {
     const room = getRoom(socket.data.roomName)
     const player = room.game.getPlayer(socket.id)
-    let scoreType, scoreValue = null
+    let scoreList = []
     const { actionType, actionValue } = data
-    switch (actionType) {
-        case 'hardDrop': {
-            scoreType = 'score'
-            scoreValue = actionValue * 2
-            break
+    try {
+        switch (actionType) {
+            case 'hardDrop': {
+                scoreList.push({ scoreType: 'score', scoreValue: actionValue * 2 })
+                break
+            }
+            case 'softDrop': {
+                scoreList.push({ scoreType: 'score', scoreValue: 1 })
+                break
+            }
+            case 'lineCleared': {
+                scoreList.push({ scoreType: 'lines', scoreValue: actionValue })
+                let linePoint = LINES_POINT[actionValue > 4 ? 4 : actionValue]
+                if (linePoint) scoreList.push({
+                    scoreType: 'score',
+                    scoreValue: CALC_LINE_SCORE_FORMULA(player.scoreBoard.level, linePoint)
+                })
+                const nextLevel = Math.floor((player.scoreBoard.lines + actionValue) / 10) + 1
+                console.log('lines', actionValue)
+                console.log('total', actionValue)
+                console.log('NEXT LEVEL', nextLevel)
+                let diffLevel = nextLevel - player.scoreBoard.level
+                console.log('DIFF LEVEL', diffLevel)
+                if (diffLevel > 0) scoreList.push({ scoreType: 'level', scoreValue: diffLevel})
+                break
+            }
         }
-        case 'softDrop': {
-            scoreType = 'score'
-            scoreValue = 1
-            break
-        }
-        case 'lineCleared': {
-            scoreType = 'lines'
-            let linePoint = LINES_POINT[actionValue]
-            if (linePoint) scoreValue = CALC_LINE_SCORE_FORMULA(player.scoreBoard.level, linePoint)
-            break
-        }
+    } catch (e) {
+        console.error(e)
     }
-    if (scoreType && scoreValue) {
-        player.setScoreBoard('score', 50)
-        return ({ scoreType, scoreValue })
+    if (scoreList?.length > 0) {
+        for (let score of scoreList) {
+            player.setScoreBoard(score.scoreType, score.scoreValue)
+        }
+
     }
-    return null
+    return scoreList
 }
 
 module.exports = {

@@ -58,8 +58,8 @@ const gameMiddleware = socket => {
                                 socket.emit('updateScore', {
                                     actionType: 'hardDrop',
                                     actionValue: hardDropOffset
-                                }, newScore => {
-                                    if (newScore) dispatch(gameActions.updateScore(newScore))
+                                }, scoreList => {
+                                    if (scoreList.length > 0) dispatch(gameActions.updateScore(scoreList))
                                 })
                             }
                         }
@@ -74,8 +74,8 @@ const gameMiddleware = socket => {
                             next(action)
                             dispatch(gameActions.updateGrid())
                             if (y > 0 && isCollided) dispatch(gameActions.getNextBlock())
-                            if (y > 0 && !isCollided && isKeyPress) socket.emit('updateScore', { actionType: 'softDrop', actionValue: null }, newScore => {
-                                if (newScore) dispatch(gameActions.updateScore(newScore))
+                            if (y > 0 && !isCollided && isKeyPress) socket.emit('updateScore', { actionType: 'softDrop', actionValue: null }, scoreList => {
+                                if (scoreList) dispatch(gameActions.updateScore(scoreList))
                             })
                         }
                     }
@@ -100,7 +100,9 @@ const gameMiddleware = socket => {
                     action.payload = {
                         grid
                     }
-                    if (countLineComplete) socket.emit('completeLine')
+                    if (countLineComplete) socket.emit('completeLine', countLineComplete, scoreList => {
+                        if (scoreList) dispatch(gameActions.updateScore(scoreList))
+                    })
                     if (game.currentBlock.collided) socket.emit('updateGrid', grid)
                     return next(action)
                 }

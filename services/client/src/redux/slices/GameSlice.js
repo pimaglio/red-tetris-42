@@ -10,7 +10,7 @@ const initialState = {
     gameStatus: 'pending',
     currentBlock: null,
     blockList: [],
-    grid: createGrid(),
+    grid: createGridTest('completeLine', 17),
     dropTime: 0,
     gameResult: null,
     scoreBoard: {
@@ -74,7 +74,9 @@ const gameSlice = createSlice({
             if (action.payload === 'winner') state.gameStatus = 'done'
         },
         updateScore: (state, action) => {
-            state.scoreBoard[action.payload.scoreType] += action.payload.scoreValue
+            for (let score of action.payload) {
+                state.scoreBoard[score.scoreType] += score.scoreValue
+            }
         }
     }
 })

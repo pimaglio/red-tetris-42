@@ -29,8 +29,8 @@ const socketHandler = ( socket, io ) => {
     socket.on('gameOver', callback => {
         callback(gameOver(socket, io))
     })
-    socket.on('completeLine', () => {
-        completeLine(socket, io)
+    socket.on('completeLine', (data, callback) => {
+        callback(completeLine(socket, data, io))
     })
     socket.on('updateGrid', data => {
         onUpdateGrid(socket, data, io)

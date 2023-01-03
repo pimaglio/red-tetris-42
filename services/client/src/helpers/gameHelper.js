@@ -16,11 +16,11 @@ export const buildBlock = ( blockShape) => {
 export const createGrid = () =>
     Array.from(Array(GRID_HEIGHT), () => Array(GRID_WIDTH).fill([0, 'clear']))
 
-export const createGridTest = (gridType) => {
+export const createGridTest = (gridType, lineCount) => {
     switch (gridType) {
         case 'completeLine': {
-            let grid = Array.from(Array(GRID_HEIGHT - 1), () => Array(GRID_WIDTH).fill([0, 'clear']))
-            grid.push(new Array(GRID_WIDTH).fill(['O', 'merged']))
+            let grid = Array.from(Array(GRID_HEIGHT - lineCount), () => Array(GRID_WIDTH).fill([0, 'clear']))
+            Array.from({length: lineCount}).forEach(() => grid.push(new Array(GRID_WIDTH).fill(['O', 'merged'])))
             return grid
         }
         default: return Array.from(Array(GRID_HEIGHT), () => Array(GRID_WIDTH).fill([0, 'clear']))
