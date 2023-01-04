@@ -42,13 +42,17 @@ export default function useGame( { dropTime, game, grid } ) {
         dispatch(gameActions.rotateBlock())
     }
 
+    const handleHoldBlock = () => {
+        dispatch(gameActions.holdBlock())
+    }
+
     /*useInterval(() => {
         handleMoveBlock(0, 1)
     }, dropTime)
 */
 
     const handleKeyActions = debounce(( { key } ) => {
-
+        console.log('KEY', key)
         switch (key) {
             case 'ArrowLeft':
                 handleMoveBlock(-1, 0)
@@ -65,6 +69,9 @@ export default function useGame( { dropTime, game, grid } ) {
             case 'ArrowUp':
                 handleRotateBlock()
                 break;
+            case 'c':
+                handleHoldBlock()
+                break
             default:
                 break;
         }

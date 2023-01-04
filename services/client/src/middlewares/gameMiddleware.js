@@ -74,7 +74,10 @@ const gameMiddleware = socket => {
                             next(action)
                             dispatch(gameActions.updateGrid())
                             if (y > 0 && isCollided) dispatch(gameActions.getNextBlock())
-                            if (y > 0 && !isCollided && isKeyPress) socket.emit('updateScore', { actionType: 'softDrop', actionValue: null }, scoreList => {
+                            if (y > 0 && !isCollided && isKeyPress) socket.emit('updateScore', {
+                                actionType: 'softDrop',
+                                actionValue: null
+                            }, scoreList => {
                                 if (scoreList) dispatch(gameActions.updateScore(scoreList))
                             })
                         }
@@ -83,7 +86,8 @@ const gameMiddleware = socket => {
                 }
                 case 'game/getNextBlock': {
                     action.payload = {
-                        nextBlock: buildBlock(game.blockList[0])
+                        ...buildBlock(game.blockList[0]),
+                        alreadyHold: action.payload?.alreadyHold || false
                     }
                     next(action)
                     dispatch(gameActions.updateCurrentBlockPosition({ x: 0, y: 0 }))
@@ -114,6 +118,13 @@ const gameMiddleware = socket => {
                             next(action)
                             return dispatch(gameActions.updateGrid())
                         }
+                    }
+                    break
+                }
+                case 'game/holdBlock': {
+                    if (!game.currentBlock.alreadyHold) {
+                        next(action)
+                        return dispatch(gameActions.getNextBlock({ alreadyHold: true }))
                     }
                     break
                 }

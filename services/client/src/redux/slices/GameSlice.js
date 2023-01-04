@@ -55,11 +55,11 @@ const gameSlice = createSlice({
         updateGrid: ( state, action ) => {
             state.grid = action.payload.grid
         },
-        addPenaltyLine: (state, action) => {
+        addPenaltyLine: ( state, action ) => {
             state.grid = action.payload
         },
         getNextBlock: ( state, action ) => {
-            state.currentBlock = action.payload.nextBlock
+            state.currentBlock = action.payload
             state.blockList.shift()
         },
         setBlockCollided: ( state ) => {
@@ -68,6 +68,9 @@ const gameSlice = createSlice({
         rotateBlock: ( state, action ) => {
             state.currentBlock = action.payload.block
         },
+        holdBlock: ( state, action ) => {
+            state.holdBlock = state.currentBlock.shape
+        },
         stopGame: ( state ) => {
             state.dropTime = 0
         },
@@ -75,7 +78,7 @@ const gameSlice = createSlice({
             state.gameResult = action.payload
             if (action.payload === 'winner') state.gameStatus = 'done'
         },
-        updateScore: (state, action) => {
+        updateScore: ( state, action ) => {
             for (let score of action.payload) {
                 state.scoreBoard[score.scoreType] += score.scoreValue
             }
