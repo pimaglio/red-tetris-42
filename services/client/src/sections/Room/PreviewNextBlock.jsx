@@ -5,7 +5,7 @@ import PreviewBlock from "../../components/PreviewBlock";
 import { createPreviewGrid } from "../../helpers/gameHelper.js";
 import { useEffect, useState } from "react";
 
-export default function PreviewNextBlock({data}) {
+export default function PreviewNextBlockList({data}) {
     const [blockList, setBlockList] = useState(Array(3).fill(createPreviewGrid()))
 
     useEffect(() => {

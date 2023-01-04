@@ -7,10 +7,11 @@ import ScoreBoard from "../../components/ScoreBoard";
 import { Button } from "../../components/shared/Button";
 // sections
 import ModalGameFinish from "./ModalGameFinish.jsx";
+import PreviewNextBlockList from "./PreviewNextBlock";
 // hooks
 import useGame from "../../hooks/useGame.js";
 import PreviewBlock from "../../components/PreviewBlock.jsx";
-import PreviewNextBlock from "./PreviewNextBlock";
+
 
 // ----------------------------------------------------------------------
 
@@ -29,9 +30,9 @@ export default function Playground() {
 
     const renderScoreBoard = useMemo(() => <ScoreBoard {...scoreBoard} />, [scoreBoard])
 
-/*    const renderPreviewBlock = useMemo(() => <PreviewBlock block={holdBlock}/>, [holdBlock])*/
+    const renderHoldBlock = useMemo(() => <PreviewBlock blockShape={holdBlock}/>, [holdBlock])
 
-    const renderBlockList = useMemo(() => <PreviewNextBlock data={blockList}/>, [blockList])
+    const renderNextBlockList = useMemo(() => <PreviewNextBlockList data={blockList}/>, [blockList])
 
     return (
         <div className={'w-3/4 outline-0 flex justify-center'} tabIndex={0}>
@@ -41,7 +42,7 @@ export default function Playground() {
                     <div>
                         <h3 className={'text-left mb-4 px-2 text-lg font-semibold text-white'}>Hold</h3>
                         <div className="p-4 bg-container sm:rounded-2xl overflow-y-auto">
-                            <PreviewBlock blockShape={'T'}/>
+                            {renderHoldBlock}
                         </div>
                     </div>
                     <div>
@@ -57,7 +58,7 @@ export default function Playground() {
                 <div className={'w-fit h-auto flex flex-col justify-between justify-between min-w-[180px]'}>
                     <div>
                         <h3 className={'text-left mb-4 px-2 text-lg font-semibold text-white'}>Next block</h3>
-                        {renderBlockList}
+                        {renderNextBlockList}
                     </div>
                 </div>
 
