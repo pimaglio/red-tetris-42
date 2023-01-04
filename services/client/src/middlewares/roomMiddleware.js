@@ -27,6 +27,9 @@ const roomMiddleware = socket => {
                     if (payload.name !== room.playerName) return dispatch(roomActions.addPlayer(payload))
                     break
                 }
+                case 'updateRoomLadder': {
+                    return dispatch(roomActions.updateLadder(payload))
+                }
             }
         });
         return next => action => {

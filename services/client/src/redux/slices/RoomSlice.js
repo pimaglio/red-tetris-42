@@ -10,6 +10,7 @@ const initialState = {
     roomLeader: null,
     playerList: [],
     replayGame: false,
+    ladder: []
 }
 
 // ----------------------------------------------------------------------
@@ -48,6 +49,9 @@ const roomSlice = createSlice({
         },
         setReplayGame: ( state, action ) => {
             state.replayGame = true
+        },
+        updateLadder: (state, action) => {
+            state.ladder = action.payload
         }
     }
 })

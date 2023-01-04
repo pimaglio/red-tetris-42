@@ -1,11 +1,12 @@
 // components
-import Grid from "../playground/Grid.jsx";
+import Grid from "../../components/playground/Grid.jsx";
 // helpers
 import { createGrid } from "../../helpers/gameHelper.js";
 // constants
 import { GAME_RESULT_LIST } from "../../constants/gameConstants.js";
 // utils
 import { truncate } from "../../utils/string.js";
+
 
 // ----------------------------------------------------------------------
 

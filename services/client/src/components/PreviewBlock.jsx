@@ -25,10 +25,8 @@ export default function PreviewBlock( { blockShape } ) {
     const renderGrid = grid => grid.map(( row, y ) => row.map(( cell, x ) => renderCell(cell, x, y)))
 
     return (
-        <div>
-            <div className={`inline-grid grid-cols-4 gap-0.5`}>
-                {renderGrid(currentGrid || GRID_EMPTY)}
-            </div>
+        <div className={`inline-grid grid-cols-4 gap-0.5`}>
+            {renderGrid(currentGrid || GRID_EMPTY)}
         </div>
     )
 }

@@ -36,28 +36,24 @@ export default function Playground() {
 
     return (
         <div className={'w-3/4 outline-0 flex justify-center'} tabIndex={0}>
-            <div className={'w-1/5'}/>
             <div className={'relative w-fit h-fit flex'}>
-                <div className={'w-fit h-auto flex flex-col justify-between justify-between min-w-[180px]'}>
+                <div className={'w-fit h-auto flex flex-col justify-between justify-between'}>
                     <div>
-                        <h3 className={'text-left mb-4 px-2 text-lg font-semibold text-white'}>Hold</h3>
-                        <div className="p-4 bg-container sm:rounded-2xl overflow-y-auto">
+                        <div className="p-4 bg-container sm:rounded-2xl">
+                            <h3 className={'text-sm text-gray-400 uppercase font-semibold mb-2'}>HOLD</h3>
                             {renderHoldBlock}
                         </div>
                     </div>
-                    <div>
-                        {renderScoreBoard}
-                    </div>
+                    {renderScoreBoard}
                 </div>
                 <div className={"h-fit mx-6"}>
-                    <h3 className={'text-left mb-4 px-2 text-lg font-semibold text-white'}>{`Playground ${roomLeader}`}</h3>
                     <div className="p-4 bg-container sm:rounded-2xl max-h-[90%] overflow-y-auto">
                         {renderGrid}
                     </div>
                 </div>
-                <div className={'w-fit h-auto flex flex-col justify-between justify-between min-w-[180px]'}>
-                    <div>
-                        <h3 className={'text-left mb-4 px-2 text-lg font-semibold text-white'}>Next block</h3>
+                <div className={'w-fit h-auto flex flex-col justify-between justify-between'}>
+                    <div className="p-4 bg-container sm:rounded-2xl overflow-y-auto">
+                        <h3 className={'text-sm text-gray-400 uppercase font-semibold mb-2'}>Next</h3>
                         {renderNextBlockList}
                     </div>
                 </div>

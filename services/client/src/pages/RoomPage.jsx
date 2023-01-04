@@ -8,18 +8,18 @@ import { roomActions } from "../redux/slices/RoomSlice.js";
 // sections
 import RoomModalError from "../sections/Room/ModalError.jsx";
 import Playground from "../sections/Room/Playground.jsx";
+import PlayerList from "../sections/Room/PlayerList.jsx";
+import RoomLadder from "../sections/Room/Ladder.jsx";
 // components
 import TetrisLoader from "../components/shared/Loading/TetrisLoading";
-import PlayerList from "../components/playerList/index.jsx";
 import Logo from "../components/shared/Logo.jsx";
-
 
 // ----------------------------------------------------------------------
 
 export default function RoomPage() {
     let state = useOverlayTriggerState({});
     const { roomName, playerName } = useParams();
-    const { isConnected, error, playerList } = useSelector(state => state.room)
+    const { isConnected, error, playerList, ladder } = useSelector(state => state.room)
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -33,12 +33,18 @@ export default function RoomPage() {
 
     return (
         <div className="relative bg-background">
-            <div className={'background-gradient room'}/>
-            <div className={'absolute top-8 left-8'}>
-                <Logo/>
-            </div>
+            {/**/}
+{/*            */}
             {isConnected ? (
                 <div className={'h-screen p-5 flex justify-center'}>
+                    <div className={'w-1/5 text-left min-w-fit'}>
+                        <div className={'text-center mb-8'}>
+                            <div className={'background-gradient room'}/>
+                            <Logo/>
+                        </div>
+                        <RoomLadder playerList={ladder} />
+                    </div>
+
                     <Playground/>
                     <PlayerList playerList={playerList}/>
                 </div>
