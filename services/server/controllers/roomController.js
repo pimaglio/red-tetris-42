@@ -49,8 +49,20 @@ const userDisconnect = (socket, data, io) => {
     }
 }
 
+const updateRoomLadder = (room, player, io) => {
+    let roomLadder = JSON.parse(JSON.stringify(room.ladder))
+    let playerAlreadyInLadder = roomLadder.find(item => item.name === player.name)
+    if (playerAlreadyInLadder && playerAlreadyInLadder.score < player.scoreBoard.score) roomLadder = roomLadder.filter(item => item.name !== player.name)
+    roomLadder.push({name: player.name, ...player.scoreBoard})
+    roomLadder = roomLadder.sort((a, b) => b.score - a.score)
+    room.updateLadder(roomLadder)
+
+    io.in(room.name).emit('updateRoomLadder', roomLadder)
+}
+
 module.exports = {
     joinRoom,
     getRoom,
-    userDisconnect
+    userDisconnect,
+    updateRoomLadder
 }

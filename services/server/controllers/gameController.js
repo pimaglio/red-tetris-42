@@ -1,5 +1,5 @@
 // controllers
-const { getRoom } = require("./roomController");
+const { getRoom, updateRoomLadder} = require("./roomController");
 // constants
 const {
     verbose,
@@ -76,12 +76,7 @@ const gameOver = ( socket, io ) => {
     }
     io.in(socket.data.roomName).emit('updatePlayer', player)
 
-    let roomLadder = JSON.parse(JSON.stringify(room.ladder))
-    let playerAlreadyInLadder = roomLadder.find(item => item.name === player.name)
-    if (playerAlreadyInLadder && playerAlreadyInLadder.score < player.scoreBoard.score) roomLadder = roomLadder.filter(item => item.name !== player.name)
-    roomLadder.push({name: player.name, ...player.scoreBoard})
-    roomLadder = roomLadder.sort((a, b) => b.score - a.score)
-    room.updateLadder(roomLadder)
+    updateRoomLadder(room, player, io)
 
     return gameResult
 }
