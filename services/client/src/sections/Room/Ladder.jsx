@@ -42,9 +42,13 @@ export default function RoomLadder( { playerList } ) {
                             ))}
                             </tbody>
                         ) : (
-                            <div className={'p-4 text-center'}>
-                                <p className={'text-center'}>There are no rankings yet.</p>
-                            </div>
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <p className={'p-4 text-center'}>There are no rankings yet.</p>
+                                </td>
+                            </tr>
+                            </tbody>
                         )}
                     </table>
                 </div>

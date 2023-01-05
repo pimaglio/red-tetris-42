@@ -42,7 +42,8 @@ export const addGridPenaltyLine = (grid, currentBlock) => {
     let newGrid = JSON.parse(JSON.stringify(grid))
     let columnIndex = newGrid.length - 1
     if (currentBlock.collided) newGrid.shift()
-    else while (columnIndex > -1 && !newGrid[columnIndex].every(cell => cell[0] === 0 && cell[1] === 'clear')) columnIndex--
+        // remove === 'clear'
+    else while (columnIndex > -1 && !newGrid[columnIndex].every(cell => cell[0] === 0)) columnIndex--
     if (columnIndex > -1) {
         newGrid.slice(columnIndex, 1)
         newGrid.push(Array.from({length: GRID_WIDTH}, () => [0, 'penalty']))
@@ -65,7 +66,7 @@ export const checkCollision = (block, grid, { x: moveX, y: moveY }) => {
             if (block.tetrimino[y][x] !== 0) {
                 if (!grid[y + block.pos.y + moveY]) return 'end'
                 else if (!grid[y + block.pos.y + moveY][x + block.pos.x + moveX]) return 'out'
-                else if (grid[y + block.pos.y + moveY][x + block.pos.x + moveX][1] !== 'clear') return 'tetrimino'
+                else if (grid[y + block.pos.y + moveY][x + block.pos.x + moveX][1] === 'merged') return 'tetrimino'
             }
         }
     }
@@ -86,49 +87,43 @@ export const buildPreviewGrid = (grid, blockShape) => {
     return grid
 }
 
-export const buildNewGrid = (grid, blockList, callback) => {
-    // First flush the stage
-    const newGrid = grid.map((row) => row.map((cell) => (cell[1] === 'clear' ? [0, 'clear'] : cell)));
+export const getPrediction = (block, grid) => {
+    let newBlock = JSON.parse(JSON.stringify(block))
+    let pos = 0
+    while (!checkCollision(newBlock, grid, { x: 0, y: 1 })) {
+        newBlock.pos.y += 1
+        pos++
+    }
+    return { x: 0, y: pos }
+}
 
-    // const getPrediction = () => {
-    //   let newBlock = JSON.parse(JSON.stringify(block))
-    //   if (newBlock.tetrimino[0][1]) {
-    //     let pos = 0
-    //     while (!checkCollision(newBlock, grid, { x: 0, y: 1 })) {
-    //       newBlock.pos.y += 1
-    //       pos++
-    //     }
-    //     return { x: 0, y: pos }
-    //   } else return false
-    // }
-    //
-    // const predict = getPrediction()
+export const buildNewGrid = (grid, block, callback) => {
+    // First flush the stage
+    const newGrid = grid.map((row) => row.map((cell) => (cell[1] !== 'merged' ? [0, 'clear'] : cell)));
+
+    const predictionBlock = getPrediction(block, grid)
 
     let needCheckCompleteLine = false
 
-    for (let block of blockList) {
-        if (block.tetrimino) {
-            for (let i = 0; i < block.tetrimino.length; i++) {
-                for (let j = 0; j < block.tetrimino[i].length; j++) {
-                    if (block.collided) needCheckCompleteLine = true
-                    if (block.tetrimino[i][j] !== 0) {
-                        newGrid[i + block.pos.y][j + block.pos.x] = [
-                            block.tetrimino[i][j],
-                            `${block.collided ? 'merged' : 'clear'}`
-                        ];
-                        // if (predict && !block.collided && predict.y > 1) {
-                        //   newGrid[i + predict.y + block.pos.y][j + block.pos.x] = [
-                        //     block.tetrimino[i][j],
-                        //     'clear',
-                        //   ]
-                        // }
+    if (block.tetrimino) {
+        for (let i = 0; i < block.tetrimino.length; i++) {
+            for (let j = 0; j < block.tetrimino[i].length; j++) {
+                if (block.collided) needCheckCompleteLine = true
+                if (block.tetrimino[i][j] !== 0) {
+                    newGrid[i + block.pos.y][j + block.pos.x] = [
+                        block.tetrimino[i][j],
+                        `${block.collided ? 'merged' : 'clear'}`
+                    ];
+                    if (predictionBlock && !block.collided && predictionBlock.y > 1) {
+                      newGrid[i + predictionBlock.y + block.pos.y][j + block.pos.x] = [
+                        block.tetrimino[i][j],
+                        'prediction',
+                      ]
                     }
                 }
             }
         }
     }
-
-
 
     if (needCheckCompleteLine) {
         return checkAndCleanCompleteLine(newGrid, callback)

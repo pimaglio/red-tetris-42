@@ -43,7 +43,7 @@ const gameMiddleware = socket => {
                 case "game/start": {
                     let { blockList } = action.payload
                     action.payload.initialBlock = buildBlock(blockList[0])
-                    action.payload.grid = buildNewGrid(game.grid, [ action.payload.initialBlock ])
+                    action.payload.grid = buildNewGrid(game.grid, action.payload.initialBlock)
                     blockList.shift()
                     return next(action)
                 }
@@ -100,7 +100,7 @@ const gameMiddleware = socket => {
                 }
                 case 'game/updateGrid': {
                     let countLineComplete = 0
-                    const grid = buildNewGrid(game.grid, [ game.currentBlock ], () => countLineComplete++)
+                    const grid = buildNewGrid(game.grid, game.currentBlock, () => countLineComplete++)
                     action.payload = {
                         grid
                     }
