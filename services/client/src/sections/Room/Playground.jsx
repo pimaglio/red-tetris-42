@@ -5,13 +5,12 @@ import { useOverlayTriggerState } from "react-stately";
 import Grid from "../../components/playground/Grid.jsx";
 import ScoreBoard from "../../components/ScoreBoard";
 import { Button } from "../../components/shared/Button";
+import PreviewBlock from "../../components/PreviewBlock.jsx";
 // sections
 import ModalGameFinish from "./ModalGameFinish.jsx";
 import PreviewNextBlockList from "./PreviewNextBlock";
 // hooks
 import useGame from "../../hooks/useGame.js";
-import PreviewBlock from "../../components/PreviewBlock.jsx";
-
 
 // ----------------------------------------------------------------------
 
@@ -19,20 +18,20 @@ export default function Playground() {
     let state = useOverlayTriggerState({});
     const { grid, dropTime, gameResult, scoreBoard, holdBlock, blockList } = useSelector(state => state.game)
     const { roomLeader, playerName, replayGame, roomName } = useSelector(state => state.room)
-    const { handleStartGame, handleRestartGame } = useGame({ dropTime })
+    const { handleStartGame, handleRestartGame, handleMouseMove, handleHardDrop } = useGame({ dropTime })
 
     useEffect(() => {
         if (!state.isOpen && gameResult) state.open()
         else if (state.isOpen && !gameResult) state.close()
     }, [ gameResult, state.isOpen ])
 
-    const renderGrid = useMemo(() => <Grid grid={grid}/>, [ grid ])
+    const renderGrid = useMemo(() => <Grid grid={grid} onMouseDown={handleHardDrop} onMouseMove={handleMouseMove}/>, [ grid ])
 
-    const renderScoreBoard = useMemo(() => <ScoreBoard {...scoreBoard} />, [scoreBoard])
+    const renderScoreBoard = useMemo(() => <ScoreBoard {...scoreBoard} />, [ scoreBoard ])
 
-    const renderHoldBlock = useMemo(() => <PreviewBlock blockShape={holdBlock}/>, [holdBlock])
+    const renderHoldBlock = useMemo(() => <PreviewBlock blockShape={holdBlock}/>, [ holdBlock ])
 
-    const renderNextBlockList = useMemo(() => <PreviewNextBlockList data={blockList}/>, [blockList])
+    const renderNextBlockList = useMemo(() => <PreviewNextBlockList data={blockList}/>, [ blockList ])
 
     return (
         <div className={'w-3/4 outline-0 flex justify-center'} tabIndex={0}>

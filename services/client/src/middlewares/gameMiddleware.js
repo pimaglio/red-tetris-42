@@ -6,11 +6,11 @@ import {
     buildBlock,
     buildNewGrid,
     checkCollision,
-    getHardDropPosition,
+    getHardDropPosition, getMaxYCollision, rotate,
     rotateBlock
 } from "../helpers/gameHelper.js";
 // constants
-import { BLOCK_LIST_ALERT_THRESHOLD } from "../constants/gameConstants.js";
+import { BLOCK_LIST_ALERT_THRESHOLD, GRID_WIDTH, TETRIMINO_COLLECTION } from "../constants/gameConstants.js";
 
 // ----------------------------------------------------------------------
 
@@ -42,10 +42,43 @@ const gameMiddleware = socket => {
             switch (action.type) {
                 case "game/start": {
                     let { blockList } = action.payload
-                    action.payload.initialBlock = buildBlock(blockList[0])
+                    action.payload.initialBlock = game.blockList.length ? buildBlock(game.blockList[0]) : buildBlock(blockList[0])
                     action.payload.grid = buildNewGrid(game.grid, action.payload.initialBlock)
                     blockList.shift()
                     return next(action)
+                }
+                case 'game/onMouseMove': {
+                    if (game.currentBlock) {
+                        let currentBlock = JSON.parse(JSON.stringify(game.currentBlock))
+                        currentBlock.pos.x = action.payload.x - Math.round(currentBlock.shape[0].length / 2)
+                        action.payload = currentBlock.pos.x
+                        let isCollided = checkCollision(currentBlock, game.grid, { x: 0, y: 0 })
+                        if (isCollided && isCollided === 'out') break
+                        currentBlock.pos.y = getMaxYCollision(currentBlock, game.grid)
+                        console.group('BLOCK POS => x: ', currentBlock.pos.x, ' y: ', currentBlock.pos.y, isCollided)
+                        //if (isCollided) currentBlock = rotateBlock(game.grid, currentBlock)
+                        if (currentBlock && !checkCollision(currentBlock, game.grid, { x: 0, y: 0 })) {
+                            //action.payload = currentBlock
+                            next(action)
+                            dispatch(gameActions.updateGrid(currentBlock.pos))
+                        }
+
+                        else {
+                            //console.log('NEED ROTATE BEFORE', currentBlock.tetrimino)
+                            currentBlock.tetrimino = rotate(TETRIMINO_COLLECTION[currentBlock.shape].shape, -1)
+                            //console.log('NEED ROTATE AFTER', currentBlock.tetrimino)
+                            //currentBlock.pos.y -= 2
+                            if (!checkCollision(currentBlock, game.grid, { x: 0, y: 0 })) {
+                                //console.log('NEED ROTATE AFTER 2', currentBlock.tetrimino)
+                                //action.payload = currentBlock
+                                next(action)
+                                dispatch(gameActions.updateGrid(currentBlock.pos))
+
+                            }
+                        }
+                        console.groupEnd()
+                    }
+                    break
                 }
                 case 'game/updateCurrentBlockPosition': {
                     if (game.gameStatus === 'inProgress') {
@@ -63,8 +96,9 @@ const gameMiddleware = socket => {
                                 })
                             }
                         }
-                        const isCollided = checkCollision(game.currentBlock, game.grid, { x, y })
-                        if (isCollided && isCollided !== 'out' && game.currentBlock.pos.y === 0) return dispatch(gameActions.stopGame())
+                        let isCollided = checkCollision(game.currentBlock, game.grid, { x, y })
+                        if (isHardDrop) isCollided = 'tetrimino'
+                        //if (isCollided && isCollided !== 'out' && game.currentBlock.pos.y === 0) return dispatch(gameActions.stopGame())
                         if (!(isCollided === 'out')) {
                             if (isCollided) {
                                 action.payload.collided = y > 0 && isCollided
@@ -73,7 +107,7 @@ const gameMiddleware = socket => {
                             }
                             next(action)
                             dispatch(gameActions.updateGrid())
-                            if (y > 0 && isCollided) dispatch(gameActions.getNextBlock())
+                            if (y > 0 && isCollided || isHardDrop) dispatch(gameActions.getNextBlock())
                             if (y > 0 && !isCollided && isKeyPress) socket.emit('updateScore', {
                                 actionType: 'softDrop',
                                 actionValue: null
@@ -100,7 +134,7 @@ const gameMiddleware = socket => {
                 }
                 case 'game/updateGrid': {
                     let countLineComplete = 0
-                    const grid = buildNewGrid(game.grid, game.currentBlock, () => countLineComplete++)
+                    const grid = buildNewGrid(game.grid, game.currentBlock, action.payload, () => countLineComplete++)
                     action.payload = {
                         grid
                     }

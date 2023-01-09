@@ -46,10 +46,14 @@ export default function useGame( { dropTime, game, grid } ) {
         dispatch(gameActions.holdBlock())
     }
 
-    /*useInterval(() => {
+    const handleMouseMove = (movePos) => {
+        dispatch(gameActions.onMouseMove(movePos))
+    }
+
+/*    useInterval(() => {
         handleMoveBlock(0, 1)
-    }, dropTime)
-*/
+    }, dropTime)*/
+
 
     const handleKeyActions = debounce(( { key } ) => {
         console.log('KEY', key)
@@ -79,6 +83,8 @@ export default function useGame( { dropTime, game, grid } ) {
 
     return {
         handleStartGame,
-        handleRestartGame
+        handleRestartGame,
+        handleMouseMove,
+        handleHardDrop
     }
 }

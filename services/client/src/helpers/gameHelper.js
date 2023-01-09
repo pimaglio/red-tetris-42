@@ -23,6 +23,15 @@ export const createGridTest = (gridType, lineCount) => {
             Array.from({length: lineCount}).forEach(() => grid.push(new Array(GRID_WIDTH).fill(['O', 'merged'])))
             return grid
         }
+        case 'custom': {
+            let grid = Array.from(Array(GRID_HEIGHT), () => Array(GRID_WIDTH).fill([0, 'clear']))
+            grid[GRID_HEIGHT - 2][3] = ['S', 'merged']
+            grid[GRID_HEIGHT - 2][4] = ['S', 'merged']
+
+            grid[GRID_HEIGHT - 1][2] = ['S', 'merged']
+            grid[GRID_HEIGHT - 1][3] = ['S', 'merged']
+            return grid
+        }
         default: return Array.from(Array(GRID_HEIGHT), () => Array(GRID_WIDTH).fill([0, 'clear']))
     }
 }
@@ -90,6 +99,7 @@ export const buildPreviewGrid = (grid, blockShape) => {
 export const getPrediction = (block, grid) => {
     let newBlock = JSON.parse(JSON.stringify(block))
     let pos = 0
+    const isCollided = checkCollision(newBlock, grid, { x: 0, y: 1 })
     while (!checkCollision(newBlock, grid, { x: 0, y: 1 })) {
         newBlock.pos.y += 1
         pos++
@@ -97,11 +107,11 @@ export const getPrediction = (block, grid) => {
     return { x: 0, y: pos }
 }
 
-export const buildNewGrid = (grid, block, callback) => {
+export const buildNewGrid = (grid, block, predictionBlock, callback) => {
     // First flush the stage
     const newGrid = grid.map((row) => row.map((cell) => (cell[1] !== 'merged' ? [0, 'clear'] : cell)));
 
-    const predictionBlock = getPrediction(block, grid)
+    predictionBlock = predictionBlock || getPrediction(block, grid)
 
     let needCheckCompleteLine = false
 
@@ -132,7 +142,7 @@ export const buildNewGrid = (grid, block, callback) => {
     return newGrid
 };
 
-function rotate(matrix, dir) {
+export const rotate = (matrix, dir) => {
     // Make the rows to become cols (transpose)
     const mtrx = matrix.map((_, index) => matrix.map(column => column[index]))
     // Reverse each row to get a rotaded matrix
@@ -153,9 +163,21 @@ export const rotateBlock = (grid, block) => {
         if (offset > newBlock.tetrimino[0].length) {
             rotate(newBlock.tetrimino, -dir)
             newBlock.pos.x = pos
-            return
+            return block
         }
     }
 
     return newBlock
+}
+
+
+export const getMaxYCollision = (block, grid) => {
+    let newBlock = JSON.parse(JSON.stringify(block))
+    newBlock.pos.y = GRID_HEIGHT - 1
+    let pos = newBlock.pos.y
+    while (checkCollision(newBlock, grid, { x: 0, y: 0 })) {
+        newBlock.pos.y -= 1
+        pos--
+    }
+    return pos
 }

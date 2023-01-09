@@ -10,9 +10,10 @@ const initialState = {
     gameStatus: 'pending',
     currentBlock: null,
     holdBlock: null,
-    blockList: null,
-    //grid: createGridTest('completeLine', 17),
-    grid: createGrid(),
+    //blockList: null,
+    blockList: ['J', 'J', 'J', 'J', 'J', 'J', 'J', 'J', 'J'],
+    grid: createGridTest('custom'),
+    //grid: createGrid(),
     dropTime: 0,
     gameResult: null,
     scoreBoard: {
@@ -32,7 +33,7 @@ const gameSlice = createSlice({
             state.error = action.payload
         },
         start: ( state, action ) => {
-            state.blockList = action.payload.blockList
+            //state.blockList = action.payload.blockList
             state.currentBlock = action.payload.initialBlock
             state.grid = action.payload.grid
             state.gameStatus = 'inProgress'
@@ -82,6 +83,9 @@ const gameSlice = createSlice({
             for (let score of action.payload) {
                 state.scoreBoard[score.scoreType] += score.scoreValue
             }
+        },
+        onMouseMove: (state, action) => {
+            state.currentBlock.pos.x = action.payload
         }
     }
 })
